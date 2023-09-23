@@ -1,0 +1,10 @@
+.Content {
+    height: 500px;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;  
+}
+
+.Main {
+    flex-grow: 2;
+}
