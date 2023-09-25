@@ -2,7 +2,7 @@ import { read, utils} from 'xlsx';
 
 /** upload excel file and verify*/
 async function handleFileAsync() {
-
+    localStorage.clear();
     const file = document.getElementById('inputFile').files;
 
     let reader = new FileReader();
@@ -21,6 +21,8 @@ async function handleFileAsync() {
         console.log(JSON.stringify(jsonData));
 
         dataByClassToLocal(jsonData);
+
+        window.dispatchEvent(new Event('storage'));
     }
 
 

@@ -1,5 +1,5 @@
 .ClassData {
-    width: 50px;
+    width:max-content;
     height: fit-content;
     background-color: hotpink;
 }

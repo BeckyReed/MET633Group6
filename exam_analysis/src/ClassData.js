@@ -1,11 +1,15 @@
 import './ClassData.css';
+import { useState } from 'react';
 
 
-function ClassData() {
+
+function ClassData({name}) {
+
+  const [lable, setlable] = useState(name);
 
     return (
       <div className="ClassData">
-        <button className="selectClassData">Class ID</button>
+        <button className="selectClassData">{lable}</button>
       </div>
     );
   }
