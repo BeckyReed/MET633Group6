@@ -5,29 +5,42 @@ async function handleFileAsync() {
     localStorage.clear();
     const file = document.getElementById('inputFile').files;
 
-    let reader = new FileReader();
-    reader.readAsArrayBuffer(file[0]);
-    reader.onload = function(e) {
-        console.log(file);
+    if (file.length > 0) {
+        const fileName = file[0].name;
+        console.log(fileName);
+        const extension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        console.log(extension);
 
-        const data = e.target.result;
-        const workbook = read(data);
+        if(extension==='xlsx') {
+            let reader = new FileReader();
+            reader.readAsArrayBuffer(file[0]);
+            reader.onload = function(e) {
+            console.log(file);
 
-        console.log(workbook);
+            const data = e.target.result;
+            const workbook = read(data);
 
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = utils.sheet_to_json(worksheet, {defval:""});
+            console.log(workbook);
+
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = utils.sheet_to_json(worksheet, {defval:""});
     
-        console.log(JSON.stringify(jsonData));
+            console.log(JSON.stringify(jsonData));
 
-        dataByClassToLocal(jsonData);
+            dataByClassToLocal(jsonData);
 
-        window.dispatchEvent(new Event('storage'));
+            window.dispatchEvent(new Event('storage'));
+        }
+
+
     }
 
 
     //CLEAR LOCAL STORAGE FOR TEST
     localStorage.clear();
+    }
+
+
 }
 
 function dataByClassToLocal(jsonData) {
