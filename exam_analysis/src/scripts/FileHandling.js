@@ -2,7 +2,11 @@ import { read, utils} from 'xlsx';
 
 /** upload excel file and verify*/
 async function handleFileAsync() {
+    
+    //CLEAR LOCAL STORAGE FOR TEST
     localStorage.clear();
+
+
     const file = document.getElementById('inputFile').files;
 
     if (file.length > 0) {
@@ -43,9 +47,11 @@ async function handleFileAsync() {
 
 }
 
+/**Store excel file data as JSON obj in arry value with key of constructed name 
+ * name == Course_Number + Semester + Year
+ * store in local storage
+ */
 function dataByClassToLocal(jsonData) {
-
-    //localStorage.setItem('test', []);
 
     jsonData.forEach(element => {
         console.log(element);
