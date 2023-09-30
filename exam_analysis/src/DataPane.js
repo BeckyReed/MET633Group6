@@ -4,29 +4,88 @@ import { handleFileAsync } from './scripts/FileHandling';
 import { useCallback, useEffect, useState } from 'react';
 
 
-
-function classDataList () {
+/**Funciton to make buttons for classes listed in Localstorage */
+/*  function classDataList () {
 
   const className = Object.keys(localStorage);
   const listItems = className.map(className => 
-  <ClassData key={className} name={className}/>);
+  <ClassData key={className} name={className} classSelectedToggle={classSelectedToggle}/>);
   return listItems;
+} */
+ 
+/**Function to set list of classes selected and not*/
+/* function classSelectList () {
+  const className = Object.keys(localStorage);
+  const listItems = new Map();
+  className.forEach((element) => listItems.set(element, false));
+  console.log(`class select map: ` + listItems);
 }
+
+function classSelectedToggle (childClickSelected) {
+  setClassSelected(childClickSelected);
+} */
 
 
 function DataPane() {
 
   const [classDataShown, setClassDataShown] = useState(classDataList);
+  const [classList, setClassList] = useState(classSelectList);
+  //const [classSelected, setClassSelected] = useState(false);
+
+/**Funciton to make buttons for classes listed in Localstorage */
+function classDataList () {
+
+  const className = Object.keys(localStorage);
+  const listItems = className.map(className => 
+  <ClassData key={className} name={className} classSelectedToggle={classSelectedToggle}/>);
+  return listItems;
+}
+ 
+/**Function to set list of classes selected and not*/
+function classSelectList () {
+  const className = Object.keys(localStorage);
+  const listItems = new Map();
+  className.forEach((element) => listItems.set(element, false));
+  console.log(`class select map: ` + listItems);
+}
+
+function classSelectedToggle (childClickSelected) {
+  let keyLable = Object.keys(childClickSelected);
+  let value = childClickSelected.keyLable;
+  console.log(`toggle class list map1: `+classList);
+
+  setClassList(
+    classList.set(keyLable, value)
+  );
   
+  console.log(`toggle class list map2: `+classList);
+}
+
+
+
 /* foreceUpdate to update previous uploads list from change in LocalStorage */
 
-  const forceUpdate = useCallback(() => setClassDataShown(classDataList),[]);
+  const forceUpdateDataShown = useCallback(() => setClassDataShown(classDataList),[]);
 
    useEffect(() => {
-    window.addEventListener('storage',forceUpdate);
+    window.addEventListener('storage',forceUpdateDataShown);
+
     setClassDataShown(classDataList);
 
-    return () => window.removeEventListener('storage',forceUpdate);
+    return () => window.removeEventListener('storage',forceUpdateDataShown);
+    
+  }, []) 
+
+  /* foreceUpdate to update previous uploads list from change in LocalStorage */
+
+  const forceUpdateSelectList = useCallback(() => setClassList(classSelectList),[]);
+
+   useEffect(() => {
+    window.addEventListener('storage',forceUpdateSelectList);
+    
+    setClassList(classSelectList);
+
+    return () => window.removeEventListener('storage',forceUpdateSelectList);
     
   }, []) 
 
