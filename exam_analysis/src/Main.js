@@ -10,7 +10,9 @@ function Main() {
             
             <button className="download">Download</button>
         </div>
-        <DataPane/>
+
+        {/* <DataPane/> */}
+        
       </div>
     );
   }
