@@ -29,7 +29,7 @@ async function handleFileAsync() {
             const worksheet = workbook.Sheets[workbook.SheetNames[0]];
             const jsonData = utils.sheet_to_json(worksheet, {defval:""});
     
-            console.log(JSON.stringify(jsonData));
+            //console.log(JSON.stringify(jsonData));
 
             dataByClassToLocal(jsonData);
 
@@ -54,7 +54,7 @@ async function handleFileAsync() {
 function dataByClassToLocal(jsonData) {
 
     jsonData.forEach(element => {
-        console.log(element);
+        //console.log(element);
         //let data = JSON.parse(element);
         let className = "" + element.Course_Number+element.Semester+element.Year;
         console.log(className);
@@ -82,7 +82,7 @@ function dataByClassToLocal(jsonData) {
         
     });
 
-    console.log(localStorage.getItem('CS633SPRING2020'));
+    //console.log(localStorage.getItem('CS633SPRING2020'));
 
     console.log(Object.keys(localStorage));
 }
