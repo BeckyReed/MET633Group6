@@ -61,6 +61,8 @@ console.log(`MAKE DATASET: classKey: `+ classKey);
 
     let data = prepLocalDataXY(classKey);
 
+    console.log(`COLOR from Make DATASET: ` + classKey + ` : ` + color);
+
     let datasetObj = {
         label: classKey,
         data: data,
