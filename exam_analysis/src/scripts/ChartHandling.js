@@ -74,6 +74,13 @@ console.log(`MAKE DATASET: classKey: `+ classKey);
 }
 
 
+/**Resize Chart before Printing event handeler */
+/* function beforePrintHandler () {
+    for (let id in Chart.instances) {
+        Chart.instances[id].resize();
+    }
+}
+ */
 
 /** Test create Chart */
 let testChart = {

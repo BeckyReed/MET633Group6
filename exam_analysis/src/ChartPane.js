@@ -12,6 +12,26 @@ const options = {
         colors: {
             forceOverride: true
         }
+    },
+    scales: {
+        y: {
+            title: {
+                display: true,
+                text: 'Score',
+                color: 'rgb(0,0,0)'
+            },
+            suggestedMin: 0,
+                suggestedMax: 100
+        },
+        x: {
+            title: {
+                display: true,
+                text: 'Time',
+                color:  'rgb(0,0,0)'
+            },
+            suggestedMax: 100,
+            suggestedMin: 0
+        }
     }
 };
 
@@ -65,7 +85,7 @@ function ChartPane({ toChartPane }) {
 
     return (
         <div className="chart">
-            <div>{toChartPane()}</div>
+            {/* <div>{toChartPane()}</div> */}
             <Scatter options={options} data={chartData(toChartPane(), colorArray)} />
 
         </div>
