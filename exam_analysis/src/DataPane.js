@@ -26,7 +26,7 @@ function classSelectedToggle (childClickSelected) {
 } */
 
 
-function DataPane() {
+function DataPane({selctedToContent}) {
 
   const [classDataShown, setClassDataShown] = useState(classDataList);
   const [classList, setClassList] = useState(classSelectList);
@@ -47,18 +47,20 @@ function classSelectList () {
   const listItems = new Map();
   className.forEach((element) => listItems.set(element, false));
   console.log(`class select map: ` + listItems);
+  return listItems;
 }
 
 function classSelectedToggle (childClickSelected) {
-  let keyLable = Object.keys(childClickSelected);
-  let value = childClickSelected.keyLable;
-  console.log(`toggle class list map1: `+classList);
-
+  let keyLable = childClickSelected.name;
+  console.log(`keyLable: ` + keyLable);
+  let value = childClickSelected.value;
+  console.log(`value: `+ value);
+  console.log(`toggle class list map1: `+ [...classList.entries()]);
   setClassList(
-    classList.set(keyLable, value)
-  );
-  
-  console.log(`toggle class list map2: `+classList);
+    new Map(classList.set(keyLable, value))
+  ); 
+  console.log(`toggle class list map2: `+[...classList.entries()]);
+  selctedToContent(classList);
 }
 
 
@@ -66,27 +68,19 @@ function classSelectedToggle (childClickSelected) {
 /* foreceUpdate to update previous uploads list from change in LocalStorage */
 
   const forceUpdateDataShown = useCallback(() => setClassDataShown(classDataList),[]);
-
    useEffect(() => {
     window.addEventListener('storage',forceUpdateDataShown);
-
     setClassDataShown(classDataList);
-
-    return () => window.removeEventListener('storage',forceUpdateDataShown);
-    
+    return () => window.removeEventListener('storage',forceUpdateDataShown);    
   }, []) 
 
   /* foreceUpdate to update previous uploads list from change in LocalStorage */
 
   const forceUpdateSelectList = useCallback(() => setClassList(classSelectList),[]);
-
    useEffect(() => {
     window.addEventListener('storage',forceUpdateSelectList);
-    
     setClassList(classSelectList);
-
-    return () => window.removeEventListener('storage',forceUpdateSelectList);
-    
+    return () => window.removeEventListener('storage',forceUpdateSelectList);   
   }, []) 
 
   

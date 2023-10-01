@@ -12,18 +12,15 @@ function ClassData({name, classSelectedToggle}) {
 
   let selected = false;
 
-  let data = {lable: selected}
-/*   function toggleSelected () {
-    if(selected == true) {
-      setClassSelected(false);
-    } else {
-      setClassSelected(true);
-    }
-  } */
+  function getData () {
+    let data = {name: lable, value: selected};
+    return data;
+  }
+  
 
     return (
       <div className="ClassData">
-        <button className="selectClassData" onClick={() => {selected=!selected; classSelectedToggle(data);  console.log(`selected: ${lable}: ` + selected);} }>{lable}</button>
+        <button className="selectClassData" onClick={() => {selected=!selected; classSelectedToggle(getData());  console.log(`selected: ${lable}: ` + selected);} }>{lable}</button>
       </div>
     );
   }

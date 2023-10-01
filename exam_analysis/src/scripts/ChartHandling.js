@@ -17,6 +17,8 @@ function prepLocalDataXY(classKey) {
 
         let stringData = `[` + localStorage.getItem(classKey) + `]`;
 
+        
+
         console.log("STRING Data:  " + stringData);
 
         let jsonData = JSON.parse(stringData);
@@ -31,24 +33,16 @@ function prepLocalDataXY(classKey) {
             jsonData.forEach(element => {
                 console.log('element: ' + element);
                 let x = element.Time;
+                console.log(`ELEMENT.time: ` + x);
                 let y = element.Score;
+                console.log(`ELEMENT.score: ` + y);
                 let point = { x, y };
                 result.push(point);
             });
 
-            console.log(result);
+            console.log(`JSON result: `+result);
 
-
-            let datasetObj = {
-                label: localStorage.key(0),
-                /*             data: Array.from( stringData, () => ({
-                                x: stringData.Time,
-                                y: stringData.Score
-                            })), */
-                data: result,
-                backgroundColor: 'rgb (0, 255, 0)'
-            };
-            return datasetObj;
+            return result;
         }
         return 'string data ' + stringData;
     }
@@ -62,6 +56,8 @@ function prepLocalDataXY(classKey) {
 
 /** Make datasets */
 function makeDataset (classKey, color) {
+
+console.log(`MAKE DATASET: classKey: `+ classKey);
 
     let data = prepLocalDataXY(classKey);
 

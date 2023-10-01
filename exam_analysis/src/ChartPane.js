@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 
 
-function chartData(classKeyArray, collorArray) {
+/* function chartData(classKeyArray, collorArray) {
 
     let data = [];
 
@@ -23,34 +23,59 @@ function chartData(classKeyArray, collorArray) {
     };
 
     return testChart;
-}
+} */
 
 
-function ChartPane() {
+function ChartPane({ toChartPane }) {
 
     let thisKeys = ['CS633SPRING2021'];
     let thisColors = ['rgb (0, 255, 0)'];
 
-/*       const [classDataUpload, setClassDataUpload] = useState(chartData(thisKeys, thisColors));
+    const [classDataUpload, setClassDataUpload] = useState([]);
 
-    //foreceUpdate to update previous uploads list from change in LocalStorage 
+    function chartData(classArray, collorArray) {
+                 for (let index = 0; index < classArray.length; index++) {
+                    if(!classDataUpload.includes(classArray[index])) {
+                        setClassDataUpload([...classDataUpload, classArray[index]]);
+                    }
+                  }
+                  for (let index = 0; index < classDataUpload.length; index++) {
+                    if (!classArray.includes(classDataUpload[index])) {
+                        setClassDataUpload(classDataUpload.splice(index, classDataUpload[index]));
+                    }
 
-    const forceUpdate = useCallback(() => setClassDataUpload(chartData), []);
+                  }
 
-    useEffect(() => {
-        window.addEventListener('storage', forceUpdate);
-        setClassDataUpload(chartData);
-        console.log("effect chart pane");
+        console.log(`Class Data Upload: ` + classDataUpload);
 
-        return () => window.removeEventListener('storage', forceUpdate);
+        let data = [];
 
-    }, [])  
- */
+        for (let index = 0; index < classArray.length; index++) {
+
+            if (classArray[index] != ``) {
+                console.log(`classArray index to make dataset:  ` + classArray[index]);
+
+                data.push(makeDataset(classArray[index], collorArray[0]));
+            }
+
+        }
+console.log(`TEST CHART DATA: ` + data);
+        let testChart = {
+            datasets: data
+
+            
+        };
+
+        
+        return testChart;
+    }
+
 
 
     return (
         <div className="chart">
-            <Scatter data={chartData(thisKeys, thisColors)} />
+            <div>{toChartPane()}</div>
+            <Scatter data={chartData(toChartPane(), thisColors)} />
 
         </div>
     );
