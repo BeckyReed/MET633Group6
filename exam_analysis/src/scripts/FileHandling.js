@@ -118,7 +118,7 @@ function handleTemplateDownload() {
     var link = document.createElement('a');
 
     link.href = url;
-    link.setAttribute('download', 'testHi.xlsx');
+    link.setAttribute('download', 'ExamAnalysisDataTemplate.xlsx');
     document.body.appendChild(link);
     link.click();
     link.remove();
