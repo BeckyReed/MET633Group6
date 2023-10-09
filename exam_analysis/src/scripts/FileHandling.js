@@ -30,7 +30,8 @@ async function handleFileAsync() {
 
                 console.log(workbook);
 
-                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                //const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const worksheet = workbook.Sheets["DATA"];
                 const jsonData = utils.sheet_to_json(worksheet, { defval: "" });
 
                 //console.log(JSON.stringify(jsonData));
