@@ -16,15 +16,12 @@ function Main({contentToMain}) {
 
     return (
       <div className="Main">
-        {/*<div className="chart">x chart goes here x</div>*/}
-        
+
         <ChartPane toChartPane={toChartPane}/>
         <div className="downloadTray">
             
             <button className="download">Download</button>
         </div>
-
-        {/* <DataPane/> */}
         
       </div>
     );

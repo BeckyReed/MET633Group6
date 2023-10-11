@@ -1,18 +1,34 @@
 import { Scatter } from "react-chartjs-2";
-import { Chart as ChartJS, elements, Colors } from "chart.js/auto";
+import { Chart as ChartJS, Colors } from "chart.js/auto";
 import './ChartPane.css';
 import './scripts/ChartHandling';
 import { colorArray } from './resource/color';
-import { prepLocalDataXY, makeDataset } from './scripts/ChartHandling';
-import { useCallback, useEffect, useState } from 'react';
+import { makeDataset, downloadPDF} from './scripts/ChartHandling';
+import { useState } from 'react';
+import {pdfjsLib} from 'pdfjs-dist/webpack';
+
+  
+
 
 ChartJS.register(Colors);
+
+const bgColor = {
+    id: 'bgColor',
+    beforeDraw: (chart, steps, options) => {
+        const { ctx, width, height } = chart;
+        ctx.fillStyle = options.backgroundColor;
+        ctx.fillRect(0, 0, width, height);
+        ctx.restore();
+    }
+}
+
 const options = {
     plugins: {
         colors: {
             forceOverride: true
-        }
-    },
+        },
+
+    }, 
     scales: {
         y: {
             title: {
@@ -32,7 +48,10 @@ const options = {
             suggestedMax: 100,
             suggestedMin: 0
         }
-    }
+    },
+    bgColor: {
+        backgroundColor: "white"
+    },
 };
 
 
@@ -85,9 +104,10 @@ function ChartPane({ toChartPane }) {
 
     return (
         <div className="chart">
-            {/* <div>{toChartPane()}</div> */}
-            <Scatter options={options} data={chartData(toChartPane(), colorArray)} />
 
+            {/* <div>{toChartPane()}</div> */}
+            <Scatter id="scatterChart" options={options} data={chartData(toChartPane(), colorArray)} />
+            <button className="download" onClick={downloadPDF}>Download PDF</button>
         </div>
     );
 }

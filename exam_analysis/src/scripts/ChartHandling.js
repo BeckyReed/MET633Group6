@@ -1,5 +1,6 @@
 import { Scatter } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js";
+import {jsPDF} from "jspdf";
 
 /** Test Data */
 const test_data = [
@@ -94,4 +95,18 @@ let testChart = {
     ]
 };
 
-export { test_data, prepLocalDataXY, makeDataset, testChart };
+
+//Make PDF with jsPDF
+function downloadPDF() {
+    const canvas = document.getElementById('scatterChart');
+
+    const canvasImage = canvas.toDataURL('image/jpeg', 1.0);
+    
+    const pdf = new jsPDF('landscape');
+    pdf.setFontSize(20);
+    pdf.addImage(canvasImage, 'JPEG', 15, 15, 280, 150);
+    pdf.save('Exam Analysis');
+}
+
+
+export { test_data, prepLocalDataXY, makeDataset, testChart, downloadPDF };
