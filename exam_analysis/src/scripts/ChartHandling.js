@@ -1,6 +1,6 @@
 import { Scatter } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js";
-import {jsPDF} from "jspdf";
+import { jsPDF } from "jspdf";
 
 /** Test Data */
 const test_data = [
@@ -18,7 +18,7 @@ function prepLocalDataXY(classKey) {
 
         let stringData = `[` + localStorage.getItem(classKey) + `]`;
 
-        
+
 
         console.log("STRING Data:  " + stringData);
 
@@ -41,7 +41,7 @@ function prepLocalDataXY(classKey) {
                 result.push(point);
             });
 
-            console.log(`JSON result: `+result);
+            console.log(`JSON result: ` + result);
 
             return result;
         }
@@ -56,9 +56,9 @@ function prepLocalDataXY(classKey) {
 
 
 /** Make datasets */
-function makeDataset (classKey, color) {
+function makeDataset(classKey, color) {
 
-console.log(`MAKE DATASET: classKey: `+ classKey);
+    console.log(`MAKE DATASET: classKey: ` + classKey);
 
     let data = prepLocalDataXY(classKey);
 
@@ -69,7 +69,7 @@ console.log(`MAKE DATASET: classKey: `+ classKey);
         data: data,
         backgroundColor: color
     };
-    
+
     return datasetObj;
 
 }
@@ -101,12 +101,12 @@ function downloadPDF() {
     const canvas = document.getElementById('scatterChart');
 
     const canvasImage = canvas.toDataURL('image/jpeg', 1.0);
-    
+
     const pdf = new jsPDF('landscape');
     pdf.setFontSize(20);
-    pdf.addImage(canvasImage, 'JPEG', 15, 15, 280, 150);
+    pdf.addImage(canvasImage, 'JPEG', 10, 15, 280, 150);
     pdf.save('Exam Analysis');
 }
 
 
-export { test_data, prepLocalDataXY, makeDataset, testChart, downloadPDF };
+export { prepLocalDataXY, makeDataset, testChart, downloadPDF };

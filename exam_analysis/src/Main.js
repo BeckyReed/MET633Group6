@@ -4,27 +4,27 @@ import './Main.css';
 import { useState } from 'react';
 
 
-function Main({contentToMain}) {
+function Main({ contentToMain }) {
 
   const [chartList, setChartList] = useState([]);
-  function toChartPane () {
+  function toChartPane() {
     setChartList(contentToMain);
     return chartList;
   }
 
 
 
-    return (
-      <div className="Main">
+  return (
+    <div className="Main">
 
-        <ChartPane toChartPane={toChartPane}/>
-        <div className="downloadTray">
+      <ChartPane toChartPane={toChartPane} />
+      {/*<div className="downloadTray">
             
             <button className="download">Download</button>
-        </div>
-        
-      </div>
-    );
-  }
-    
+    </div>*/}
+
+    </div>
+  );
+}
+
 export default Main;

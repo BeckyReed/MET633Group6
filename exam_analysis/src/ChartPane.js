@@ -3,32 +3,28 @@ import { Chart as ChartJS, Colors } from "chart.js/auto";
 import './ChartPane.css';
 import './scripts/ChartHandling';
 import { colorArray } from './resource/color';
-import { makeDataset, downloadPDF} from './scripts/ChartHandling';
+import { makeDataset, downloadPDF } from './scripts/ChartHandling';
 import { useState } from 'react';
-import {pdfjsLib} from 'pdfjs-dist/webpack';
 
-  
+
 
 
 ChartJS.register(Colors);
 
 const bgColor = {
     id: 'bgColor',
-    beforeDraw: (chart, steps, options) => {
-        const { ctx, width, height } = chart;
-        ctx.fillStyle = options.backgroundColor;
+    beforeDraw: (chart, args, pluinOptions) => {
+        const { ctx, canvas: { top, botom, left, right, width, height } } = chart;
+        ctx.save();
+
+        ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, width, height);
-        ctx.restore();
+
     }
-}
+};
 
 const options = {
-    plugins: {
-        colors: {
-            forceOverride: true
-        },
 
-    }, 
     scales: {
         y: {
             title: {
@@ -37,22 +33,37 @@ const options = {
                 color: 'rgb(0,0,0)'
             },
             suggestedMin: 0,
-                suggestedMax: 100
+            suggestedMax: 100,
+            ticks: {
+                stepSize: 5
+            }
         },
         x: {
             title: {
                 display: true,
                 text: 'Time',
-                color:  'rgb(0,0,0)'
+                color: 'rgb(0,0,0)'
             },
             suggestedMax: 100,
-            suggestedMin: 0
+            suggestedMin: 0,
+            ticks: {
+                stepSize: 5
+            }
         }
     },
     bgColor: {
-        backgroundColor: "white"
+        color: 'white'
     },
+
+    plugins: {
+        colors: {
+            forceOverride: true
+        }
+    }
 };
+
+
+
 
 
 
@@ -93,7 +104,6 @@ function ChartPane({ toChartPane }) {
         let testChart = {
             datasets: data
 
-
         };
 
 
@@ -106,7 +116,7 @@ function ChartPane({ toChartPane }) {
         <div className="chart">
 
             {/* <div>{toChartPane()}</div> */}
-            <Scatter id="scatterChart" options={options} data={chartData(toChartPane(), colorArray)} />
+            <Scatter id="scatterChart" options={options} plugins={[bgColor]} data={chartData(toChartPane(), colorArray)} />
             <button className="download" onClick={downloadPDF}>Download PDF</button>
         </div>
     );
