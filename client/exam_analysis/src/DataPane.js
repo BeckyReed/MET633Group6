@@ -1,6 +1,6 @@
 import './DataPane.css';
 import ClassData from './ClassData';
-import { handleFileAsync, handleTemplateDownload} from './scripts/FileHandling';
+import { handleFileAsync, handleTemplateDownload } from './scripts/FileHandling';
 import { useCallback, useEffect, useState } from 'react';
 //import { ExamAnalysisDataTemplate as dataTemplate} from './templates';
 
@@ -28,9 +28,36 @@ function classSelectedToggle (childClickSelected) {
 
 function DataPane({ selctedToContent }) {
 
+  /**DATABASE WORK FOR DATA */
+  //TEST GET DATA 
+  const getClassData = async () => {
+    try {
+      const response = await fetch(`http://localhost:4000/classes`);
+      const json = await response.json();
+      console.log(json);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  useEffect(() => getClassData, []);
+
+
+  const getExamData = async () => {
+    const classId = 2;
+    try {
+      const response = await fetch(`http://localhost:4000/exams/${classId}`);
+      const json = await response.json();
+      console.log(json);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  useEffect(() => getExamData, []);
+
+
+  /**LOCAL WORK FOR DATA */
   const [classDataShown, setClassDataShown] = useState(classDataList);
   const [classList, setClassList] = useState(classSelectList);
-  //const [classSelected, setClassSelected] = useState(false);
 
   /**Funciton to make buttons for classes listed in Localstorage */
   function classDataList() {
@@ -90,6 +117,10 @@ function DataPane({ selctedToContent }) {
       <div id="existingData">
         <h3>Previous Uploads</h3>
         <div id="classOptions">
+          {classDataShown}
+        </div>
+        <h3>DB TEST - Previous Uploads</h3>
+        <div id="classOptionsDB">
           {classDataShown}
         </div>
       </div>

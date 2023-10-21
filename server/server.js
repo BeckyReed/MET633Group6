@@ -1,13 +1,90 @@
+const PORT = process.env.PORT ?? 4000;
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const pool = require("./database.js")
+const database = require("./database.js");
+const pool = require('./database.js').pool;
 
 //middleware
 app.use(cors());
 app.use(express.json());
 
-app.post("/adduser", (req, res) => {
+
+app.get('/classes', async (req, res) => {
+    try {
+       const classes = await pool.query('SELECT * FROM classes');
+       res.json(classes.rows);
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+app.get('/exams/:classID', async (req, res) => {
+
+    //TEST
+    console.log(req);
+    const { classID }  = req.params;
+    const classIDint = parseInt(classID);
+    console.log( `CLASS ID: ${classID}` );
+    try {
+        const exams = await pool.query('SELECT * FROM exams WHERE class_id = $1', [classID]);
+        res.json(exams.rows)
+    } catch (err) {
+        console.log(err);
+    }
+})
+
+
+
+/* 
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
+    next();
+});
+
+app.get('/', (req, res) => {
+    database.getUsers()
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+});
+
+app.post('/users', (req, res) => {
+    database.createUser(req.body)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+});
+
+app.delete('/users/:id', (req, res) => {
+    database.deleteUser(req.params.id)
+        .then(response => {
+            res.status(200).send(response);
+        })
+        .catch(error => {
+            res.status(500).send(error);
+        })
+})
+
+ */
+
+/** GETs */
+/* app.get("/api", (req, res) => {
+    res.json({ "usersTest": ["uOne", "uTwo", "uThree"] });
+});
+ */
+
+
+/** POSTs */
+/* app.post("/adduser", (req, res) => {
     const username = req.body["username"];
     const email = req.body["email"];
     console.log("Username: " + username);
@@ -18,9 +95,9 @@ app.post("/adduser", (req, res) => {
         console.log("Data Saved");
         console.log(response);
     })
-    .catch((err) => {
-        console.log(err);
-    })
+        .catch((err) => {
+            console.log(err);
+        })
 
     console.log(req.body);
     res.send("Response RCVD: " + req.body);
@@ -42,9 +119,9 @@ app.post("/addclass", (req, res) => {
         console.log("Data Saved");
         console.log(response);
     })
-    .catch((err) => {
-        console.log(err);
-    })
+        .catch((err) => {
+            console.log(err);
+        })
 
     console.log(req.body);
     res.send("Response RCVD: " + req.body);
@@ -66,14 +143,14 @@ app.post("/addexam", (req, res) => {
         console.log("Data Saved");
         console.log(response);
     })
-    .catch((err) => {
-        console.log(err);
-    })
+        .catch((err) => {
+            console.log(err);
+        })
 
     console.log(req.body);
     res.send("Response RCVD: " + req.body);
-});
+}); */
 
-app.listen(4000, () => {
-    console.log("server started on port 4000");
+app.listen(PORT, () => {
+    console.log(`server started on port ${PORT}`);
 });
