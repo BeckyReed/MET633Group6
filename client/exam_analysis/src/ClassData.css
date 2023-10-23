@@ -1,5 +1,9 @@
 .ClassData {
-    width:max-content;
+    width:100%;
     height: fit-content;
     background-color: hotpink;
+}
+
+.selectClassData {
+    border-radius: 8px;
 }

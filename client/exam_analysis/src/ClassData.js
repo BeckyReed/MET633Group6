@@ -4,23 +4,33 @@ import { useState } from 'react';
 
 
 
-function ClassData({name, classSelectedToggle}) {
+function ClassData({className, name, classSelectedToggleDB}) {
 
-  //super(selected);
-  const [lable, setlable] = useState(name);
+  const [ lable, setlable ] = useState(name);
+  const [ selected, setSelected ] = useState(true);
+  const [ courseName, setCourseName ] = useState(className);
 
 
-  let selected = false;
-
+  //pass data to the DataPaine method classSelectedToggleDB
   function getData () {
-    let data = {name: lable, value: selected};
+    setSelected( !selected );
+    let data = {'name': lable, 'value': selected, 'courseName': courseName};
+    console.log(`GET DATA VALUE: ${JSON.stringify(data)}`);
     return data;
   }
   
+  //selection indicator
+  let tag = () => {
+    if(!selected) {
+      return `*`;
+    } else {
+      return ``;
+    }
+  }
 
     return (
       <div className="ClassData">
-        <button className="selectClassData" onClick={() => {selected=!selected; classSelectedToggle(getData());  console.log(`selected: ${lable}: ` + selected);} }>{lable}</button>
+        <button className="selectClassData" onClick={() => {classSelectedToggleDB(getData());   console.log(`selected: ${lable}: ` + selected);} }>{tag()}{lable}</button>
       </div>
     );
   }

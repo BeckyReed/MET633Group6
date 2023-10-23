@@ -4,7 +4,7 @@ import './ChartPane.css';
 import './scripts/ChartHandling';
 import { colorArray } from './resource/color';
 import { makeDataset, downloadPDF } from './scripts/ChartHandling';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
 
@@ -69,9 +69,38 @@ const options = {
 
 function ChartPane({ toChartPane }) {
 
-    let thisKeys = ['CS633SPRING2021'];
-    let thisColors = ['rgb (0, 255, 0)'];
+    /**EXAM LIST FROM DB */
+    const [exams, setExams] = useState([]);
+    /**User ID */
+    const [userID, setUserID] = useState(1);
 
+
+
+    
+    //TEST GET DATA EXAMS
+    async function getExamData(){
+        //TEST HARD VALUE
+        const className = "CS633SPRING2020";
+
+
+        try {
+            //const response = await fetch(`http://localhost:4000/exams/${userID}${className}`);
+
+            //TEST
+            const response = await fetch(`http://localhost:4000/exams`);
+
+            const json = await response.json();
+            console.log(json);
+            setExams(json);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    useEffect(() => getExamData, []);
+    console.log(`CHART PANE EXAMS GET DATA ${exams}`);
+    console.log(exams);
+
+    /**CLASS LIST TO SHOW CHART FOR */
     const [classDataUpload, setClassDataUpload] = useState([]);
 
     function chartData(classArray, colorArray) {
@@ -96,7 +125,8 @@ function ChartPane({ toChartPane }) {
             if (classArray[index] != ``) {
                 console.log(`classArray index to make dataset:  ` + classArray[index]);
 
-                data.push(makeDataset(classArray[index], colorArray[index]));
+                data.push(makeDataset(toChartPane(), userID, exams, classArray[index], colorArray[index]));
+                //data.push(makeDataset(toChartPane(), , classArray[index], colorArray[index]));
             }
 
         }
