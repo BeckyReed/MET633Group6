@@ -67,65 +67,103 @@ const options = {
 
 
 
-function ChartPane({ toChartPane }) {
+function ChartPane({ toChartPaneList, toChartPaneExams }) {
 
     /**EXAM LIST FROM DB */
-    const [exams, setExams] = useState([]);
+    const [exams, setExams] = useState();
     /**User ID */
     const [userID, setUserID] = useState(1);
 
+    useEffect(() => {
+            setExams(toChartPaneExams);
+    },[toChartPaneExams]);
 
 
-    
-    //TEST GET DATA EXAMS
-    async function getExamData(){
-        //TEST HARD VALUE
-        const className = "CS633SPRING2020";
+    /**get exam list */
+    function getExams() {
 
 
-        try {
-            //const response = await fetch(`http://localhost:4000/exams/${userID}${className}`);
+        if (toChartPaneExams != null) {
 
-            //TEST
-            const response = await fetch(`http://localhost:4000/exams`);
+            /* let concatExams = []
+            let examsArrays = toChartPaneExams();
+            examsArrays.forEach(element => {
+                concatExams.concat(element);
+            });
 
-            const json = await response.json();
-            console.log(json);
-            setExams(json);
-        } catch (err) {
-            console.log(err);
+ */
+            setExams(toChartPaneExams);
+            console.log(`chart pane exams: ${exams}`)
         }
+        else {
+            console.log(`Null To Chart Pane Exams`);
+        }
+
     }
-    useEffect(() => getExamData, []);
-    console.log(`CHART PANE EXAMS GET DATA ${exams}`);
+
     console.log(exams);
 
+    //TEST GET DATA EXAMS
+    /*     async function getExamData(){
+            //TEST HARD VALUE
+            const className = "CS633SPRING2020";
+    
+    
+            try {
+                //const response = await fetch(`http://localhost:4000/exams/${userID}${className}`);
+    
+                //TEST
+                const response = await fetch(`http://localhost:4000/exams`);
+    
+                const json = await response.json();
+                console.log(json);
+                setExams(json);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        useEffect(() => getExamData, []);
+        console.log(`CHART PANE EXAMS GET DATA ${exams}`);
+        console.log(exams); */
+
     /**CLASS LIST TO SHOW CHART FOR */
-    const [classDataUpload, setClassDataUpload] = useState([]);
+
+    //const [classDataUpload, setClassDataUpload] = useState([]);
 
     function chartData(classArray, colorArray) {
-        for (let index = 0; index < classArray.length; index++) {
-            if (!classDataUpload.includes(classArray[index])) {
-                setClassDataUpload([...classDataUpload, classArray[index]]);
-            }
-        }
-        for (let index = 0; index < classDataUpload.length; index++) {
-            if (!classArray.includes(classDataUpload[index])) {
-                setClassDataUpload(classDataUpload.splice(index, classDataUpload[index]));
-            }
 
-        }
+        console.log(`TESTING: CHART PANE CHART DATA: To Chart Pane List: ${toChartPaneList()}`);
 
-        console.log(`Class Data Upload: ` + classDataUpload);
+        let testOnStart
+        if (classArray == null) {
+            testOnStart = [];
+        } else {
+            testOnStart = classArray;
+        }
+        /*         for (let index = 0; index < classArray.length; index++) {
+                    if (!getExams.includes(classArray[index])) {
+                        setClassDataUpload([...classDataUpload, classArray[index]]);
+                    }
+                }
+                for (let index = 0; index < classDataUpload.length; index++) {
+                    if (!classArray.includes(classDataUpload[index])) {
+                        setClassDataUpload(classDataUpload.splice(index, classDataUpload[index]));
+                    }
+        
+                }
+        
+                console.log(`Class Data Upload: ` + classDataUpload); */
 
         let data = [];
 
-        for (let index = 0; index < classArray.length; index++) {
+        for (let index = 0; index < testOnStart.length; index++) {
 
-            if (classArray[index] != ``) {
-                console.log(`classArray index to make dataset:  ` + classArray[index]);
+            if (testOnStart[index] != ``) {
+                console.log(`classArray index to make dataset:  ` + testOnStart[index]);
 
-                data.push(makeDataset(toChartPane(), userID, exams, classArray[index], colorArray[index]));
+
+
+                data.push(makeDataset(toChartPaneList(), userID, exams, testOnStart[index], colorArray[index]));
                 //data.push(makeDataset(toChartPane(), , classArray[index], colorArray[index]));
             }
 
@@ -142,11 +180,53 @@ function ChartPane({ toChartPane }) {
 
 
 
+
+    /*  const [classDataUpload, setClassDataUpload] = useState([]);
+ 
+     function chartData(classArray, colorArray) {
+         for (let index = 0; index < classArray.length; index++) {
+             if (!classDataUpload.includes(classArray[index])) {
+                 setClassDataUpload([...classDataUpload, classArray[index]]);
+             }
+         }
+         for (let index = 0; index < classDataUpload.length; index++) {
+             if (!classArray.includes(classDataUpload[index])) {
+                 setClassDataUpload(classDataUpload.splice(index, classDataUpload[index]));
+             }
+ 
+         }
+ 
+         console.log(`Class Data Upload: ` + classDataUpload);
+ 
+         let data = [];
+ 
+         for (let index = 0; index < classArray.length; index++) {
+ 
+             if (classArray[index] != ``) {
+                 console.log(`classArray index to make dataset:  ` + classArray[index]);
+ 
+                 data.push(makeDataset(toChartPaneList(), userID, exams, classArray[index], colorArray[index]));
+                 //data.push(makeDataset(toChartPane(), , classArray[index], colorArray[index]));
+             }
+ 
+         }
+         console.log(`TEST CHART DATA: ` + data);
+         let testChart = {
+             datasets: data
+ 
+         };
+ 
+ 
+         return testChart;
+     }
+  */
+
+
     return (
         <div className="chart">
 
             {/* <div>{toChartPane()}</div> */}
-            <Scatter id="scatterChart" options={options} plugins={[bgColor]} data={chartData(toChartPane(), colorArray)} />
+            <Scatter id="scatterChart" options={options} plugins={[bgColor]} data={chartData(toChartPaneList(), colorArray)} />
             <button className="download" onClick={downloadPDF}>Download PDF</button>
         </div>
     );

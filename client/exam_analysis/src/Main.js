@@ -1,23 +1,36 @@
 import DataPane from './DataPane';
 import ChartPane from './ChartPane';
 import './Main.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
-function Main({ contentToMain }) {
+function Main({ contentToMainSelected, contentToMainExams }) {
 
   const [chartList, setChartList] = useState([]);
-  function toChartPane() {
-    setChartList(contentToMain);
-    return chartList;
+  const [ examData, setExamData ] = useState([]);
+
+
+
+  function toChartPaneList() {
+    //setChartList(contentToMainSelected);
+    console.log(`TEST to Chart Pane List: ${contentToMainSelected()}`);
+    return contentToMainSelected();
   }
 
+  function toChartPaneExams() {
+    //console.log(`TEST to Chart Pane Exams Content: ${[...contentToMainExams()]}`);
+    //setExamData([...examData, contentToMainExams ]);
+    console.log(`TEST to Chart Pane Exams: ${JSON.stringify(...contentToMainExams())}`);
+    return contentToMainExams();
+  }
+  //useEffect(() => toChartPaneExams, []);
+  //console.log(examData);
 
 
   return (
     <div className="Main">
 
-      <ChartPane toChartPane={toChartPane} />
+      <ChartPane toChartPaneList={toChartPaneList} toChartPaneExams={toChartPaneExams}/>
       {/*<div className="downloadTray">
             
             <button className="download">Download</button>

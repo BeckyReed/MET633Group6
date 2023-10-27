@@ -167,9 +167,13 @@ app.post("/addclass", (req, res) => {
     console.log("Class_Year: " + class_year);
     console.log("User_id: " + user_id);
 
-    const insertSTMT = `INSERT INTO classes (class_name, course_number, semester, class_year, user_id) VALUES ('${class_name}', '${course_number}', '${semester}', '${class_year}', '${user_id}');`;
+    const insertSTMT = `INSERT INTO classes 
+    (class_name, course_number, semester, class_year, user_id) 
+    VALUES ('${class_name}', '${course_number}', '${semester}', '${class_year}', '${user_id}')
+    ON CONFLICT ON CONSTRAINT class_name
+    DO UPDATE ;`;
     pool.query(insertSTMT).then((response) => {
-        console.log("Data Saved");
+        console.log("Data Saved CLASS");
         console.log(response);
     })
         .catch((err) => {
@@ -200,7 +204,7 @@ app.post("/addexam", (req, res) => {
 
     const insertSTMT = `INSERT INTO exams (class_name, time_min, score, is_outlier) VALUES ('${class_name}', '${time_min}', '${score}', '${is_outlier}');`;
     pool.query(insertSTMT).then((response) => {
-        console.log("Data Saved");
+        console.log("Data Saved EXAM");
         console.log(response);
     })
         .catch((err) => {

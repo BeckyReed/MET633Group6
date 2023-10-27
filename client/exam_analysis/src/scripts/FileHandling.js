@@ -57,8 +57,27 @@ async function handleFileAsync(user_id) {
                 let exams = examFromExcelToDB(jsonData, user_id);
 
                 //classes.forEach((element) => checkClassDB(element));
-                classes.forEach((element) => postClassData(element));
-                exams.forEach((element) => postExamData(element));
+                //classes.forEach((element) => postClassData(element));
+                //exams.forEach((element) => postExamData(element));
+
+                let classPromises = [];
+                let examPromises = [];
+                for (let i = 0; i<classes.length; i++) {
+                    let promise = postClassData(classes[i]);
+                    classPromises.push(promise);
+                }
+
+                Promise.all(classPromises).then( results => {
+                    console.log("CLASS Promise. ALL RETURNED");
+                    for(let i=0; i<exams.length; i++) {
+                        let promise = postExamData(exams[i]);
+                        examPromises.push(promise);
+                    }
+                    Promise.all(examPromises).then( results => {
+                        console.log("EXAM Promise. ALL RETURNED");
+                    })
+                })
+
 
                 window.dispatchEvent(new Event('storage'));
             }
@@ -73,6 +92,17 @@ async function handleFileAsync(user_id) {
 
 
 }
+
+
+//post CLASS and EXAM async
+async function asyncPost(classData, examData) {
+    let classRes = classData.forEach((element) => postClassData(element));
+    let examRes = examData.forEach((element) => postExamData(element));
+    let result = {"Class Res": classRes, "Exam Res": examRes};
+    return result;
+}
+
+
 
 
 /**Class for Post excel file data to database
@@ -116,6 +146,7 @@ async function postClassData(data) {
             body: JSON.stringify(data)
         })
         console.log(response);
+        return response;
     } catch (err) {
         console.log(err)
     }
