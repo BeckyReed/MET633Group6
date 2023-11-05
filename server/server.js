@@ -10,6 +10,13 @@ app.use(cors());
 app.use(express.json());
 
 
+
+app.listen(PORT, () => {
+    console.log(`server started on port ${PORT}`);
+});
+
+
+
 app.get('/classes/:userID', async (req, res) => {
 
     //TEST
@@ -216,6 +223,3 @@ app.post("/addexam", (req, res) => {
     res.send("Response RCVD: " + req.body);
 }); 
 
-app.listen(PORT, () => {
-    console.log(`server started on port ${PORT}`);
-});

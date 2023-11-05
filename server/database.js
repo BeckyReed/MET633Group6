@@ -7,7 +7,7 @@ const pool = new Pool({
     password: process.env.PASSWORD,
     host: process.env.HOST,
     port: process.env.DBPORT,
-    database: "test_exam_analysis"
+    database: "test_exam_analysis" 
 
 });
 
@@ -50,9 +50,9 @@ const pool = new Pool({
 
 module.exports = {
     pool,
-    getUsers,
-    createUser,
-    deleteUser
+    // getUsers,
+    // createUser,
+    // deleteUser
 }
 
 
