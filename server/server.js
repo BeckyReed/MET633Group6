@@ -167,7 +167,12 @@ app.post("/addclass", (req, res) => {
     console.log("Class_Year: " + class_year);
     console.log("User_id: " + user_id);
 
-    const insertSTMT = `INSERT INTO classes (class_name, course_number, semester, class_year, user_id) VALUES ('${class_name}', '${course_number}', '${semester}', '${class_year}', '${user_id}');`;
+    /** Function that checkes for existing class entry
+     *  Removes and replaces if present (associated exams cascade deleted)
+     *  Inserts if not present
+     */
+    const insertSTMT = `SELECT fn_replace_on_conflict( '${class_name}', '${course_number}', '${semester}', '${class_year}', '${user_id}' )`;
+    
     pool.query(insertSTMT).then((response) => {
         console.log("Data Saved CLASS");
         console.log(response);
