@@ -23,8 +23,19 @@ const bgColor = {
     }
 };
 
-const options = {
+const xStart = {
+    id: 'xStart',
+    afterDataLimits: (chart, axis, pluginOptions) => {
 
+    }
+}
+
+const options = {
+    elements: {
+        point: {
+            pointStyle: 'rectRot'
+        }
+    },
     scales: {
         y: {
             title: {
@@ -32,10 +43,17 @@ const options = {
                 text: 'Score',
                 color: 'rgb(0,0,0)'
             },
-            suggestedMin: 0,
-            suggestedMax: 100,
+            // suggestedMin: 0,
+            // suggestedMax: 100,
+            max: 100,
+            // grace: 10,
             ticks: {
-                stepSize: 5
+                stepSize: 5,
+                includeBounds: false
+            },
+            afterDataLimits: function(axis) {
+                axis.max +=1;
+                axis.min -=2;
             }
         },
         x: {
@@ -45,9 +63,15 @@ const options = {
                 color: 'rgb(0,0,0)'
             },
             suggestedMax: 100,
-            suggestedMin: 0,
+            // grace: 10,
+            // suggestedMin: 0,
             ticks: {
-                stepSize: 5
+                stepSize: 10,
+                includeBounds: false
+            },
+            afterDataLimits: function(axis) {
+                //axis.max +=.5;
+                axis.min -=10;
             }
         }
     },
