@@ -95,12 +95,12 @@ async function handleFileAsync(user_id) {
 
 
 //post CLASS and EXAM async
-async function asyncPost(classData, examData) {
+/* async function asyncPost(classData, examData) {
     let classRes = classData.forEach((element) => postClassData(element));
     let examRes = examData.forEach((element) => postExamData(element));
     let result = {"Class Res": classRes, "Exam Res": examRes};
     return result;
-}
+} */
 
 
 
@@ -140,7 +140,7 @@ function classFromExcelToDB(jsonData, user_id) {
 /**Post Class to Database */
 async function postClassData(data) {
     try {
-        const response = await fetch("http://localhost:4000/addclass", {
+        const response = await fetch(`${process.env.REACT_APP_SERVERURL}/addclass`, {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -155,7 +155,7 @@ async function postClassData(data) {
 /**Check if Class already in Database 
  * DOES NOT WORK
 */
-async function checkClassDB(data) {
+/* async function checkClassDB(data) {
     try {
         // check for matching class row in table
         //const className = data.className;
@@ -170,7 +170,7 @@ async function checkClassDB(data) {
         console.log(err)
     }
 }
-
+ */
 
 /**Exam for Post excel file data to database
  * Course_Number >> 
@@ -231,7 +231,7 @@ function examFromExcelToDB(jsonData,  user_id) {
 /**Post Exam to Database */
 async function postExamData(data) {
     try {
-        const response = await fetch("http://localhost:4000/addexam", {
+        const response = await fetch(`${process.env.REACT_APP_SERVERURL}/addexam`, {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)

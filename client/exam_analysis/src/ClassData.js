@@ -20,7 +20,7 @@ function ClassData({className, name, classSelectedToggleDB}) {
       //const className = "CS633SPRING2020";
 
       try {
-          const response = await fetch(`http://localhost:4000/exams/${courseName}`);
+          const response = await fetch(`${process.env.REACT_APP_SERVERURL}/exams/${courseName}`);
 
           const json = await response.json();
           console.log(`getExamData: JSON:: ${JSON.stringify(json)}`);
