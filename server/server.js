@@ -1,4 +1,5 @@
 const PORT = process.env.DBPORT ?? 4000;
+//const PORT = 4000;
 //const PORT = process.env.DBConnLink ?? 4000;
 const express = require("express");
 const app = express();
@@ -23,7 +24,7 @@ app.get('/classes/:userID', async (req, res) => {
     //TEST
     console.log(req);
     const { userID } = req.params;
-    const userIDint = parseInt(userID);
+    //const userIDint = parseInt(userID);
     console.log(`USER ID:  ${userID}`)
     try {
        const classes = await pool.query('SELECT * FROM classes WHERE user_id = $1', [userID]);
