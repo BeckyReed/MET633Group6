@@ -33,8 +33,9 @@ function DataPane({ selctedToContent, examsToContent }) {
   }
   //useEffect(() => getClassData, []);
   useEffect(() => {
-    console.log(`### use effect getClassData_ ${JSON.stringify(...classesShown)}`);
+    
     getClassData();
+    console.log(`### use effect getClassData_ ${JSON.stringify([...classesShown])}`);
     //console.log(`select exam list array in Toggle:  ${JSON.stringify(...examsList)}}`);
     //examsToContent(examsList);
   }, []);
