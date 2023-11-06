@@ -11,7 +11,7 @@ function DataPane({ selctedToContent, examsToContent }) {
   const [userID, setUserID] = useState(1);
 
   /**CLASS LIST FROM DB */
-  const [classesShown, setClassesShown] = useState(null);
+  const [classesShown, setClassesShown] = useState([]);
   /**LIST OF SELECTED CLASSES */
   const [classListDB, setClassListDB] = useState(classSelectListDB);
 
@@ -19,7 +19,7 @@ function DataPane({ selctedToContent, examsToContent }) {
   const [examsList, setExamsList] = useState([]);
 
   //TEST GET DATA CLASSES
-  const getClassData = async () => {
+  async function getClassData ()  {
     //const userId = 1;
     try {
       console.log(`### getClassData Async Call to DB ###`);
@@ -31,7 +31,14 @@ function DataPane({ selctedToContent, examsToContent }) {
       console.log(err);
     }
   }
-  useEffect(() => getClassData, []);
+  //useEffect(() => getClassData, []);
+  useEffect(() => {
+    console.log(`### use effect getClassData_ ${JSON.stringify(...classesShown)}`);
+    getClassData();
+    //console.log(`select exam list array in Toggle:  ${JSON.stringify(...examsList)}}`);
+    //examsToContent(examsList);
+  }, []);
+
   console.log(classesShown);
 
   //TEST GET DATA EXAMS
@@ -66,6 +73,7 @@ function DataPane({ selctedToContent, examsToContent }) {
     console.log(`### class select map: `+ [...listItems.entries()]);
     return listItems;
   }
+
 
 
   //get Exam Data JSON
