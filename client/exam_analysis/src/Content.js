@@ -7,7 +7,7 @@ import DataPane from './DataPane';
 
 function Content() {
 
-  const [showingGetData, setShowingGetData] = useState(false);
+  const [showingGetData, setShowingGetData] = useState(true);//TESTING true, instead of false, trying to pin differnece in prod
   const [selctedClass, setSelectedClass] = useState(new Map());
   const [chartList, setChartList] = useState([]);
   const [fetchedExams, setFetchedExams] = useState([]);
