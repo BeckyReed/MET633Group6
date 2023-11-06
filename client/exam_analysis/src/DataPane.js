@@ -63,7 +63,7 @@ function DataPane({ selctedToContent, examsToContent }) {
   function classSelectListDB() {
     const listItems = new Map();
     classesShown?.forEach((element) => listItems.set(element, false));
-    console.log(`class select map: ` + listItems);
+    console.log(`### class select map: `+ [...listItems.entries()]);
     return listItems;
   }
 
