@@ -25,7 +25,7 @@ function DataPane({ selctedToContent, examsToContent }) {
       console.log(`### getClassData Async Call to DB ###`);
       const response = await fetch(`${process.env.REACT_APP_SERVERURL}/classes/${userID}`);
       const json = await response.json();
-      console.log(json);
+      console.log(`### JSON from getClassData Async Call to DB ${json}`);
       setClassesShown(json);
     } catch (err) {
       console.log(err);
