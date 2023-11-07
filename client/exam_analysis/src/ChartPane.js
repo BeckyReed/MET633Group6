@@ -23,12 +23,6 @@ const bgColor = {
     }
 };
 
-const xStart = {
-    id: 'xStart',
-    afterDataLimits: (chart, axis, pluginOptions) => {
-
-    }
-}
 
 const options = {
     elements: {
