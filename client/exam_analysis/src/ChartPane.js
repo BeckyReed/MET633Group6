@@ -43,16 +43,19 @@ const options = {
                 text: 'Score',
                 color: 'rgb(0,0,0)'
             },
-            // suggestedMin: 0,
-            // suggestedMax: 100,
-            max: 100,
-            // grace: 10,
+            //max: 100,
             ticks: {
                 stepSize: 5,
                 includeBounds: false
             },
             afterDataLimits: function(axis) {
-                axis.max +=1;
+                if (axis.max < 90){
+                    axis.max +=10;
+                } else {
+                    axis.max = 100;
+                    axis.max +=1;
+                }
+                //axis.max +=1;
                 if (axis.min >= 5) {
                     axis.min -=2;
                 }                
