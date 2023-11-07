@@ -1,0 +1,16 @@
+{
+  "name": "met633group6",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "if-env TYPE=server && (cd server && npm install) || (cd client/exam_analysis && npm install",
+    "server": "node ./server/server.js",
+    "client": "cd client/exam_analysis && npm start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "if-env": "^1.0.4"
+  }
+}

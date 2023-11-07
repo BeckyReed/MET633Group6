@@ -7,10 +7,73 @@ const test_data = [
     { x: 5, y: 3 }
 ];
 
-/**Get data from Local and assign to x,y values in datasets */
-function prepLocalDataXY(classKey) {
+
+
+/**Get data from DB and assign to x,y values in datasets */
+function prepDbDataXY(classesShown, userId, examData, classKey) {
 
     /**test with first item in local */
+    let classKeys = new Map();
+
+    console.log('ELEMENTS CLASSES SHOWN');
+    console.log(classesShown);
+
+    classesShown.forEach(element => {
+        console.log(`ELMENT COURSE NAME FOR PREP DB DATA XY:  ${element}`);
+        classKeys.set(`${element}`, `${userId}${element}`);
+    });
+
+
+
+    //if (classKeys.includes(classKey)) {
+
+    let stringData = JSON.stringify(examData);
+
+
+
+    console.log("STRING Data:  " + stringData);
+
+    let jsonData = examData;
+    console.log('JSON Data:  ' + jsonData);
+
+    if (jsonData != `[null]`) {
+        // let jsonData = JSON.parse(stringData);
+        // let stringArray = [stringData];
+        let result = [];
+        // let startArray = Array.from(stringArray);
+        // console.log('START ARRAY');
+        // console.log(startArray);
+        jsonData.forEach(element => {
+
+            if (classKeys.get(classKey) == element.class_name) {
+                console.log('element: ' + element);
+                let x = element.time_min;
+                console.log(`ELEMENT.time: ` + x);
+                let y = element.score;
+                console.log(`ELEMENT.score: ` + y);
+                let point = { x, y };
+                result.push(point);
+            }
+        });
+
+        console.log(`JSON result: ` + result);
+
+        return result;
+    }
+    //return 'string data ' + stringData;
+    //}
+
+
+    //return [];
+
+
+}
+
+
+/**Get data from Local and assign to x,y values in datasets */
+/* function prepLocalDataXY(classKey) {
+
+    //test with first item in local
     let classKeys = Object.keys(localStorage);
 
 
@@ -53,14 +116,20 @@ function prepLocalDataXY(classKey) {
 
 
 }
-
+ */
 
 /** Make datasets */
-function makeDataset(classKey, color) {
+function makeDataset(classesShown, userId, examData, classKey, color) {
 
     console.log(`MAKE DATASET: classKey: ` + classKey);
 
-    let data = prepLocalDataXY(classKey);
+
+
+    console.log('ELEMENT FROM MAKE DATASET CLASSES SHOWN');
+    console.log(classesShown);
+
+    //let data = prepLocalDataXY(classKey);
+    let data = prepDbDataXY(classesShown, userId, examData, classKey);
 
     console.log(`COLOR from Make DATASET: ` + classKey + ` : ` + color);
 
@@ -84,16 +153,16 @@ function makeDataset(classKey, color) {
  */
 
 /** Test create Chart */
-let testChart = {
+/* let testChart = {
     datasets: [
-        /*         {
-                    label: 'class 1',
-                    data: test_data,
-                    backgroundColor: 'rgb (0, 255, 255)'
-                }  */
+        // {
+        //            label: 'class 1',
+          //          data: test_data,
+            //        backgroundColor: 'rgb (0, 255, 255)'
+              //  }  
         prepLocalDataXY()
     ]
-};
+}; */
 
 
 //Make PDF with jsPDF
@@ -109,4 +178,4 @@ function downloadPDF() {
 }
 
 
-export { prepLocalDataXY, makeDataset, testChart, downloadPDF };
+export { makeDataset, downloadPDF };

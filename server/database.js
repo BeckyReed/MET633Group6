@@ -1,52 +1,63 @@
 
 const { Pool } = require("pg");
+require('dotenv').config()
 
 const pool = new Pool({
-    user: "postgres",
-    password: "db7532",
-    host: "localhost",
-    port: 5432,
-    database: "test_exam_analysis"
+    // user: 'postgres',
+    // password: process.env.PASSWORD,
+    // host: process.env.HOST,
+    port: process.env.DBPORT,
+    // database: "test_exam_analysis" 
+    connectionString: process.env.DBConnLink,
+    ssl: {
+        rejectUnauthorized: false
+    }
 
-})
+});
 
-const createDbQry = `CREATE DATABASE test_exam_analysis;`;
+/**Users*/
 
-const createTblQry =
-    `DROP TABLE IF EXISTS users, classes, exams CASCADE;
+    const getUsers = () => {
+        return new Promise(function(res, rej) {
+            pool.query('SELECT * FROM users ORDER BY user_id ASC', (err, results) => {
+                if (err) {
+                    rej(error);
+                }
+                res(results.rows);
+            })
+        })
+    };
 
-    CREATE TABLE users (
-        user_id INT GENERATED ALWAYS AS IDENTITY,
-        email VARCHAR(255) NOT NULL,
-        username VARCHAR(255) NOT NULL,
-        PRIMARY KEY(user_id)
-    );
+    const createUser = (body) => {
+        return new Promise(function(res, rej) {
+            const {email, username} = body;
+            pool.query('INSERT INTO users (email, username) VALUES ($1, $2) RETURNING *', [email, username], (err, results) => {
+                if (err) {
+                    rej(err);
+                }
+                res(`A new user has been added added: ${results.rows[0]}`);
+            })
+        })
+    };
 
-    CREATE TABLE classes (
-        class_id INT GENERATED ALWAYS AS IDENTITY,
-        course_number VARCHAR(10) NOT NULL,
-        semester VARCHAR(20) NOT NULL,
-        class_year NUMERIC(4,0) NOT NULL,
-        user_id INT,
-        PRIMARY KEY(class_id),
-        CONSTRAINT fk_user
-            FOREIGN KEY (user_id)
-                REFERENCES users(user_id)
-                ON DELETE CASCADE
-    );
+    const deleteUser = () => {
+        return new Promise(function(res, rej) {
+            const id = parseInt(request.params.id);
+            pool.query('DELETE FROM users WHERE user_id = $1', [id], (err, results) => {
+                if (err) {
+                    rej(err);
+                }
+                res(`User deleted with ID: ${id}`);
+            })
+        })
+    }
 
-    CREATE TABLE exams (
-        exam_id INT GENERATED ALWAYS AS IDENTITY,
-        class_id INT,
-        time_min NUMERIC NOT NULL,
-        score NUMERIC(6,2) NOT NULL,
-        is_outlier BOOLEAN NOT NULL,
-        PRIMARY KEY(exam_id),
-        CONSTRAINT fk_class
-            FOREIGN KEY (class_id)
-                REFERENCES classes(class_id)
-                ON DELETE CASCADE
-    );`;
+module.exports = {
+    pool,
+    // getUsers,
+    // createUser,
+    // deleteUser
+}
 
 
 /* 
@@ -58,4 +69,3 @@ pool.query(createTblQry).then((response) => {
         console.log(err);
     });
  */
-module.exports = pool;
