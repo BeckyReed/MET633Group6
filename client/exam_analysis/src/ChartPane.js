@@ -53,7 +53,9 @@ const options = {
             },
             afterDataLimits: function(axis) {
                 axis.max +=1;
-                axis.min -=2;
+                if (axis.min >= 5) {
+                    axis.min -=2;
+                }                
             }
         },
         x: {
@@ -62,16 +64,16 @@ const options = {
                 text: 'Time',
                 color: 'rgb(0,0,0)'
             },
-            suggestedMax: 100,
-            // grace: 10,
-            // suggestedMin: 0,
+            //suggestedMax: 100,
             ticks: {
                 stepSize: 10,
                 includeBounds: false
             },
             afterDataLimits: function(axis) {
-                //axis.max +=.5;
-                axis.min -=10;
+                if (axis.min >= 10) {
+                    axis.min -=10;
+                }
+                axis.max +=1;
             }
         }
     },
