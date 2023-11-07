@@ -51,7 +51,7 @@ const options = {
                 } */
                 axis.max +=1;
                 if (axis.min >= 5) {
-                    axis.min -=2;
+                    axis.min -=1;
                 }                
             }
         },
