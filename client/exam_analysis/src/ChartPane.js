@@ -1,5 +1,5 @@
-import { Scatter } from "react-chartjs-2";
-import { Chart as ChartJS, Colors } from "chart.js/auto";
+import { Scatter, Line } from "react-chartjs-2";
+import { Chart as ChartJS, Colors, LineElement } from "chart.js/auto";
 import './ChartPane.css';
 import './scripts/ChartHandling';
 import { colorArray } from './resource/color';
@@ -9,7 +9,10 @@ import { useState, useEffect } from 'react';
 
 
 
-ChartJS.register(Colors);
+ChartJS.register(
+    Colors,
+    LineElement
+    );
 
 const bgColor = {
     id: 'bgColor',
@@ -23,11 +26,55 @@ const bgColor = {
     }
 };
 
+const hQuadrentLine = {
+    id: 'hQuadrentLine',
+    beforeDatasetsDraw(chart, args, pluinOptions) {
+        const{ 
+            ctx, 
+            chartArea: {top, right, bottom, left, width, height}, 
+            scales: {x,y} 
+        } = chart;
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'gray';
+        ctx.moveTo(left, ((bottom+top)/2));
+        ctx.lineTo(right, ((bottom+top)/2));
+        ctx.stroke();
+        ctx.restore();
+        
+    }
+};
+
+const vQuadrentLine = {
+    id: 'vQuadrentLine',
+    beforeDatasetsDraw(chart, args, pluinOptions) {
+        const{ 
+            ctx, 
+            chartArea: {top, right, bottom, left, width, height}, 
+            scales: {x,y} 
+        } = chart;
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = 'gray';
+        ctx.moveTo(((width/2)+left), top);
+        ctx.lineTo(((width/2)+left), bottom);
+        ctx.stroke();
+        ctx.restore();
+        
+    }
+};
+
+
 
 const options = {
     elements: {
         point: {
-            pointStyle: 'rectRot'
+            pointStyle: 'rectRot',
+            radius: 4
         }
     },
     scales: {
@@ -37,19 +84,19 @@ const options = {
                 text: 'Score',
                 color: 'rgb(0,0,0)'
             },
-            max: 100,
+            //max: 100,
             ticks: {
                 stepSize: 5,
                 includeBounds: false
             },
             afterDataLimits: function(axis) {
-/*                 if (axis.max < 90){
+                if (axis.max < 90){
                     axis.max +=10;
                 } else {
                     axis.max = 100;
-                    axis.max +=1;
-                } */
-                axis.max +=1;
+                    //axis.max +=1;
+                }
+                //axis.max +=1;
                 if (axis.min >= 5) {
                     axis.min -=1;
                 }                
@@ -58,7 +105,7 @@ const options = {
         x: {
             title: {
                 display: true,
-                text: 'Time',
+                text: 'Time in Minutes',
                 color: 'rgb(0,0,0)'
             },
             //suggestedMax: 100,
@@ -74,11 +121,8 @@ const options = {
             }
         }
     },
-    bgColor: {
-        color: 'white'
-    },
-
     plugins: {
+        
         colors: {
             forceOverride: true
         }
@@ -249,7 +293,7 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
         <div className="chart">
 
             {/* <div>{toChartPane()}</div> */}
-            <Scatter id="scatterChart" options={options} plugins={[bgColor]} data={chartData(toChartPaneList(), colorArray)} />
+            <Scatter id="scatterChart" options={options} plugins={[bgColor, hQuadrentLine, vQuadrentLine]} data={chartData(toChartPaneList(), colorArray)} />
             <button className="download" onClick={downloadPDF}>Download PDF</button>
         </div>
     );
