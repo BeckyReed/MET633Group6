@@ -23,12 +23,6 @@ const bgColor = {
     }
 };
 
-const xStart = {
-    id: 'xStart',
-    afterDataLimits: (chart, axis, pluginOptions) => {
-
-    }
-}
 
 const options = {
     elements: {
@@ -43,17 +37,22 @@ const options = {
                 text: 'Score',
                 color: 'rgb(0,0,0)'
             },
-            // suggestedMin: 0,
-            // suggestedMax: 100,
-            max: 100,
-            // grace: 10,
+            //max: 100,
             ticks: {
                 stepSize: 5,
                 includeBounds: false
             },
             afterDataLimits: function(axis) {
-                axis.max +=1;
-                axis.min -=2;
+                if (axis.max < 90){
+                    axis.max +=10;
+                } else {
+                    axis.max = 100;
+                    axis.max +=1;
+                }
+                //axis.max +=1;
+                if (axis.min >= 5) {
+                    axis.min -=2;
+                }                
             }
         },
         x: {
@@ -62,16 +61,16 @@ const options = {
                 text: 'Time',
                 color: 'rgb(0,0,0)'
             },
-            suggestedMax: 100,
-            // grace: 10,
-            // suggestedMin: 0,
+            //suggestedMax: 100,
             ticks: {
                 stepSize: 10,
                 includeBounds: false
             },
             afterDataLimits: function(axis) {
-                //axis.max +=.5;
-                axis.min -=10;
+                if (axis.min >= 10) {
+                    axis.min -=10;
+                }
+                axis.max +=1;
             }
         }
     },

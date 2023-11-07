@@ -69,13 +69,26 @@ async function handleFileAsync(user_id) {
 
                 Promise.all(classPromises).then( results => {
                     console.log("CLASS Promise. ALL RETURNED");
-                    for(let i=0; i<exams.length; i++) {
+                    /** Adding delay before moving to EXAM table data, to give DB time to complete tasks.
+                     *  Had been inconsistently loosing data from EXAM table on hosted version. 
+                     */
+                    setTimeout(()=>{
+                        console.log("DELAY IN Promise. ALL RETURNED");
+                        for(let i=0; i<exams.length; i++) {
+                            let promise = postExamData(exams[i]);
+                            examPromises.push(promise);
+                        }
+                        Promise.all(examPromises).then( results => {
+                            console.log("EXAM Promise. ALL RETURNED");
+                        })
+                    }, 3000);
+                    /* for(let i=0; i<exams.length; i++) {
                         let promise = postExamData(exams[i]);
                         examPromises.push(promise);
                     }
                     Promise.all(examPromises).then( results => {
                         console.log("EXAM Promise. ALL RETURNED");
-                    })
+                    }) */
                 })
 
 
