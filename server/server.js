@@ -6,6 +6,8 @@ const app = express();
 const cors = require("cors");
 const database = require("./database.js");
 const pool = require('./database.js').pool;
+const bcript = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 //middleware
 app.use(cors());
@@ -17,6 +19,33 @@ app.listen(PORT, () => {
     console.log(`server started on port ${PORT}`);
 });
 
+//Sign In
+app.post('/login', async (req, res) => {
+
+    const { email, password } = req.body;
+
+    const salt = bcript.genSaltSync(10);
+    const hashedPassword = bcript.hashSync(password, salt);
+
+
+    try {
+
+    } catch (err) {
+        console.log(err);
+    }
+});
+
+//Sign Up (gets hashed password into DB)
+app.post('/signup', async (req, res) => {
+
+    const { email, password } = req.body;
+
+    try {
+
+    } catch (err) {
+        console.error(err);
+    }
+});
 
 
 app.get('/classes/:userID', async (req, res) => {
@@ -27,8 +56,8 @@ app.get('/classes/:userID', async (req, res) => {
     //const userIDint = parseInt(userID);
     console.log(`USER ID:  ${userID}`)
     try {
-       const classes = await pool.query('SELECT * FROM classes WHERE user_id = $1', [userID]);
-       res.json(classes.rows);
+        const classes = await pool.query('SELECT * FROM classes WHERE user_id = $1', [userID]);
+        res.json(classes.rows);
     } catch (err) {
         console.log(err);
     }
@@ -37,16 +66,16 @@ app.get('/classes/:userID', async (req, res) => {
 //TRying to check for matching class rows in the thable
 //DOES NOT WORK
 app.get('/class_match/:className', async (req, res) => {
-     console.log(req);
+    console.log(req);
     console.log("TEST");
-    const {className} = req.params;
-    console.log(`Match Course Name: ${className}`); 
+    const { className } = req.params;
+    console.log(`Match Course Name: ${className}`);
     const params = req.params;
     console.log(`params: ${params}`);
 
     try {
         const classes = await pool.query('SELECT * FROM classes WHERE $1', [className]);
-        
+
         //const classes = await pool.query(`SELECT (classes.class_name) FROM classes WHERE (classes.class_name) = $1`, [`${className}`]);
         console.log(`class match result: `);
         console.log(classes);
@@ -61,9 +90,9 @@ app.get('/exams/:courseName', async (req, res) => {
 
     //TEST
     console.log(req);
-    const { courseName }  = req.params;
+    const { courseName } = req.params;
     //const classIDint = parseInt(classID);
-    console.log( `CLASS ID: ${courseName}` );
+    console.log(`CLASS ID: ${courseName}`);
     try {
         const exams = await pool.query('SELECT * FROM exams WHERE class_name = $1', [courseName]);
         res.json(exams.rows)
@@ -158,9 +187,9 @@ app.delete('/users/:id', (req, res) => {
 
 
 app.post("/addclass", (req, res) => {
-/*     const { userID } = req.params;
-    const userIDint = parseInt(userID);
-    console.log(`USER ID:  ${userID}`) */
+    /*     const { userID } = req.params;
+        const userIDint = parseInt(userID);
+        console.log(`USER ID:  ${userID}`) */
     const class_name = req.body["className"];
     const course_number = req.body["courseNumber"];
     const semester = req.body["semester"];
@@ -181,7 +210,7 @@ app.post("/addclass", (req, res) => {
      *  Inserts if not present
      */
     const insertSTMT = `SELECT fn_replace_on_conflict( '${class_name}', '${course_number}', '${semester}', '${class_year}', '${user_id}' )`;
-    
+
     pool.query(insertSTMT).then((response) => {
         console.log("Data Saved CLASS");
         console.log(response);
@@ -201,8 +230,8 @@ app.post("/addexam", (req, res) => {
     const score = req.body["score"];
     const is_outlier = req.body["outlier"];
 
-    
-    
+
+
     //TESTING
     //const class_name = 1;
 
@@ -223,5 +252,5 @@ app.post("/addexam", (req, res) => {
 
     console.log(req.body);
     res.send("Response RCVD: " + req.body);
-}); 
+});
 

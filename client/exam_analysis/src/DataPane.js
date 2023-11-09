@@ -2,10 +2,14 @@ import './DataPane.css';
 import ClassData from './ClassData';
 import { handleFileAsync, handleTemplateDownload } from './scripts/FileHandling';
 import { useCallback, useEffect, useState } from 'react';
-
+import {useCookies} from 'react-cookie';
 
 function DataPane({ selctedToContent, examsToContent }) {
 
+
+  const [cookies, setCookie, removeCookie] = useCookies(null);
+
+  
   /**DATABASE WORK FOR DATA */
   /**USER ID FROM DB */
   const [userID, setUserID] = useState(1);

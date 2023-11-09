@@ -62,3 +62,6 @@ LANGUAGE plpgsql;
 INSERT INTO users (email, username) 
 	VALUES ('test@test.com', 'TestUser');
 
+INSERT INTO users (email, username) 
+	VALUES ('elentukh@bu.edu', 'Alex Elentukh');
+
