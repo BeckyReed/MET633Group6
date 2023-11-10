@@ -84,12 +84,15 @@ const options = {
                 text: 'Score',
                 color: 'rgb(0,0,0)',
                 font: {
-                    size: 15
+                    size: 20
                 }
             },
             ticks: {
                 stepSize: 5,
-                includeBounds: false
+                includeBounds: false,
+                font: {
+                    size: 15
+                }
             },
             afterDataLimits: function(axis) {
                     axis.max = 100;
@@ -104,13 +107,16 @@ const options = {
                 text: 'Time in Minutes',
                 color: 'rgb(0,0,0)',
                 font: {
-                    size: 15
+                    size: 20
                 }
             },
             //suggestedMax: 100,
             ticks: {
                 stepSize: 10,
-                includeBounds: false
+                includeBounds: false,
+                font: {
+                    size: 15
+                }
             },
             afterDataLimits: function(axis) {
                 if (axis.min >= 10) {
@@ -353,7 +359,7 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
             {/* <div>{toChartPane()}</div> */}
             <Scatter id="scatterChart" options={options} plugins={[bgColor, hQuadrentLine, vQuadrentLine]} data={chartData(toChartPaneList(), colorArray)} />
             <div>
-                <h3 id="statStandardDeviation">Standard Deviation: {standDev}</h3>
+                <h3 id="statStandardDeviation">Standard Deviation (Score): {standDev}</h3>
                 <h3 id="statCorrelation">Correlation: {correlation}</h3>
             </div>
             <button className="download" onClick={() => downloadPDF(standDev, correlation)}>Download PDF</button>
