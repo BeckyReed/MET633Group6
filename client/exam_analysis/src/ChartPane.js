@@ -5,7 +5,7 @@ import './scripts/ChartHandling';
 import { colorArray } from './resource/color';
 import { makeDataset, downloadPDF } from './scripts/ChartHandling';
 import { useState, useEffect } from 'react';
-
+import { standardDeviation, sampleCorrelation } from "simple-statistics";
 
 
 
@@ -82,21 +82,17 @@ const options = {
             title: {
                 display: true,
                 text: 'Score',
-                color: 'rgb(0,0,0)'
+                color: 'rgb(0,0,0)',
+                font: {
+                    size: 15
+                }
             },
-            //max: 100,
             ticks: {
                 stepSize: 5,
                 includeBounds: false
             },
             afterDataLimits: function(axis) {
-                if (axis.max < 90){
-                    axis.max +=10;
-                } else {
                     axis.max = 100;
-                    //axis.max +=1;
-                }
-                //axis.max +=1;
                 if (axis.min >= 5) {
                     axis.min -=1;
                 }                
@@ -106,7 +102,10 @@ const options = {
             title: {
                 display: true,
                 text: 'Time in Minutes',
-                color: 'rgb(0,0,0)'
+                color: 'rgb(0,0,0)',
+                font: {
+                    size: 15
+                }
             },
             //suggestedMax: 100,
             ticks: {
@@ -125,6 +124,13 @@ const options = {
         
         colors: {
             forceOverride: true
+        },
+        legend: {
+            labels: {
+                font: {
+                    size: 15
+                }
+            }
         }
     }
 };
@@ -137,13 +143,65 @@ const options = {
 function ChartPane({ toChartPaneList, toChartPaneExams }) {
 
     /**EXAM LIST FROM DB */
-    const [exams, setExams] = useState();
+    const [exams, setExams] = useState([]);
+    /**EXAM STATS Standard Deviation */
+    const [standDev, setStandDev] = useState();
+    /**EXAM STATS Correlation */
+    const [correlation, setCorrelation] = useState();
     /**User ID */
     const [userID, setUserID] = useState(1);
 
     useEffect(() => {
             setExams(toChartPaneExams);
     },[toChartPaneExams]);
+
+    useEffect(() => {
+        const scores = getScoreArray();
+        let result;
+        if (scores.length>0){
+            result = standardDeviation(getScoreArray()).toPrecision(5);
+        }
+        setStandDev(result);
+    }, [exams]);
+
+
+    useEffect(() => {
+        const scores = getScoreArray();
+        // const times = getTimeArray();
+        let result;
+        if (scores.length>0){
+            result = sampleCorrelation(getScoreArray(), getTimeArray()).toPrecision(5);
+        }
+        setCorrelation(result);
+    }, [exams]);
+
+
+    
+    /**get exam score array */
+    function getScoreArray() {
+        const scores = [];
+        if (exams.length>0) {
+            exams.forEach(element => {
+                    let score = parseFloat(element.score);
+                    console.log(`%%% Stata score: ${score}`);
+                    scores.push(score);
+            });
+        };
+        return scores;
+    }
+
+    /**get exam time array */
+    function getTimeArray() {
+        const times = [];
+        if (exams.length>0) {
+            exams.forEach(element => {
+                    let time = parseFloat(element.time_min);
+                    console.log(`%%% Stata time: ${time}`);
+                    times.push(time);
+            });
+        };
+        return times;
+    }
 
 
     /**get exam list */
@@ -294,7 +352,11 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
 
             {/* <div>{toChartPane()}</div> */}
             <Scatter id="scatterChart" options={options} plugins={[bgColor, hQuadrentLine, vQuadrentLine]} data={chartData(toChartPaneList(), colorArray)} />
-            <button className="download" onClick={downloadPDF}>Download PDF</button>
+            <div>
+                <h3 id="statStandardDeviation">Standard Deviation: {standDev}</h3>
+                <h3 id="statCorrelation">Correlation: {correlation}</h3>
+            </div>
+            <button className="download" onClick={() => downloadPDF(standDev, correlation)}>Download PDF</button>
         </div>
     );
 }
