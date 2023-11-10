@@ -174,7 +174,7 @@ function downloadPDF(standardDeviation, correlation) {
     const pdf = new jsPDF('landscape');
     pdf.setFontSize(20);
     pdf.addImage(canvasImage, 'JPEG', 10, 15, 280, 150);
-    pdf.text(`Standard Deviation: ${standardDeviation}`, 20, 175);
+    pdf.text(`Standard Deviation (Score): ${standardDeviation}`, 20, 175);
     pdf.text(`Correlation: ${correlation}`, 20, 185);
     pdf.save('Exam Analysis');
 }
