@@ -166,7 +166,7 @@ function makeDataset(classesShown, userId, examData, classKey, color) {
 
 
 //Make PDF with jsPDF
-function downloadPDF() {
+function downloadPDF(standardDeviation, correlation) {
     const canvas = document.getElementById('scatterChart');
 
     const canvasImage = canvas.toDataURL('image/jpeg', 1.0);
@@ -174,6 +174,8 @@ function downloadPDF() {
     const pdf = new jsPDF('landscape');
     pdf.setFontSize(20);
     pdf.addImage(canvasImage, 'JPEG', 10, 15, 280, 150);
+    pdf.text(`Standard Deviation: ${standardDeviation}`, 20, 175);
+    pdf.text(`Correlation: ${correlation}`, 20, 185);
     pdf.save('Exam Analysis');
 }
 

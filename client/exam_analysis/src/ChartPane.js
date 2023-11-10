@@ -82,21 +82,17 @@ const options = {
             title: {
                 display: true,
                 text: 'Score',
-                color: 'rgb(0,0,0)'
+                color: 'rgb(0,0,0)',
+                font: {
+                    size: 15
+                }
             },
-            //max: 100,
             ticks: {
                 stepSize: 5,
                 includeBounds: false
             },
             afterDataLimits: function(axis) {
-                if (axis.max < 90){
-                    axis.max +=10;
-                } else {
                     axis.max = 100;
-                    //axis.max +=1;
-                }
-                //axis.max +=1;
                 if (axis.min >= 5) {
                     axis.min -=1;
                 }                
@@ -106,7 +102,10 @@ const options = {
             title: {
                 display: true,
                 text: 'Time in Minutes',
-                color: 'rgb(0,0,0)'
+                color: 'rgb(0,0,0)',
+                font: {
+                    size: 15
+                }
             },
             //suggestedMax: 100,
             ticks: {
@@ -125,6 +124,13 @@ const options = {
         
         colors: {
             forceOverride: true
+        },
+        legend: {
+            labels: {
+                font: {
+                    size: 15
+                }
+            }
         }
     }
 };
@@ -350,7 +356,7 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
                 <h3 id="statStandardDeviation">Standard Deviation: {standDev}</h3>
                 <h3 id="statCorrelation">Correlation: {correlation}</h3>
             </div>
-            <button className="download" onClick={downloadPDF}>Download PDF</button>
+            <button className="download" onClick={() => downloadPDF(standDev, correlation)}>Download PDF</button>
         </div>
     );
 }
