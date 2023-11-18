@@ -156,8 +156,12 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
 
     /**EXAM LIST FROM DB */
     const [exams, setExams] = useState([]);
-        /**EXAM STATS Dataset Size*/
-        const [datasetSize, setDatasetSize] = useState();
+    /**Class LIST FROM DB */
+    const [list, setList] = useState([]);
+    /**CHART DATA */
+    const [chartDataSet, setChartDataSet] = useState();
+    /**EXAM STATS Dataset Size*/
+    const [datasetSize, setDatasetSize] = useState();
     /**EXAM STATS Standard Deviation SCORE*/
     const [standDevScore, setStandDevScore] = useState();
     /**EXAM STATS Standard Deviation TIME*/
@@ -168,33 +172,102 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
     const [userID, setUserID] = useState(1);
 
     useEffect(() => {
-            setExams(toChartPaneExams);
+        setExams(toChartPaneExams);
     },[toChartPaneExams]);
 
     useEffect(() => {
-        const scores = getScoreArray();
-        setDatasetSize(scores.length);
-    }, [exams]);
+        setList(toChartPaneList);
+    },[toChartPaneList]);
+
 
     useEffect(() => {
+
+        console.log(`%%% ChartPane: useEffect Stats: list: ${list}`);
+
+        const scores = getScoreArray();
+        const time = getTimeArray();
+
+        setDatasetSize(scores.length);
+
+        let resultSDscore;
+        if (scores.length>0){
+            resultSDscore = standardDeviation(getScoreArray()).toFixed(2);
+        }
+        setStandDevScore(resultSDscore);
+
+        let resultSDtime;
+        if (time.length>0){
+            resultSDtime = standardDeviation(getTimeArray()).toFixed(2);
+        }
+        setStandDevTime(resultSDtime);
+
+        let resultCor;
+        if (scores.length>0){
+            resultCor = sampleCorrelation(getScoreArray(), getTimeArray()).toFixed(2);
+        }
+        setCorrelation(resultCor);
+
+
+
+    }, [list]);
+
+
+
+    useEffect(() => {
+
+        console.log(`%%% ChartPane: useEffect Stats: list: ${list}`);
+
+        const scores = getScoreArray();
+        const time = getTimeArray();
+
+        setDatasetSize(scores.length);
+
+        let resultSDscore;
+        if (scores.length>0){
+            resultSDscore = standardDeviation(getScoreArray()).toFixed(2);
+        }
+        setStandDevScore(resultSDscore);
+
+        let resultSDtime;
+        if (time.length>0){
+            resultSDtime = standardDeviation(getTimeArray()).toFixed(2);
+        }
+        setStandDevTime(resultSDtime);
+
+        let resultCor;
+        if (scores.length>0){
+            resultCor = sampleCorrelation(getScoreArray(), getTimeArray()).toFixed(2);
+        }
+        setCorrelation(resultCor);
+
+
+
+    }, [exams]);
+
+   /*  useEffect(() => {
+        const scores = getScoreArray();
+        setDatasetSize(scores.length);
+    }, [exams]); */
+
+    /* useEffect(() => {
         const scores = getScoreArray();
         let result;
         if (scores.length>0){
             result = standardDeviation(getScoreArray()).toFixed(2);
         }
         setStandDevScore(result);
-    }, [exams]);
+    }, [exams]); */
 
-    useEffect(() => {
+    /* useEffect(() => {
         const time = getTimeArray();
         let result;
         if (time.length>0){
             result = standardDeviation(getTimeArray()).toFixed(2);
         }
         setStandDevTime(result);
-    }, [exams]);
+    }, [exams]); */
 
-    useEffect(() => {
+    /* useEffect(() => {
         const scores = getScoreArray();
         // const times = getTimeArray();
         let result;
@@ -203,87 +276,58 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
         }
         setCorrelation(result);
     }, [exams]);
-
+ */
 
     
     /**get exam score array */
     function getScoreArray() {
         const scores = [];
-        if (exams.length>0) {
+        if (list.length > 0 && exams.length > 0) {
             exams.forEach(element => {
                     let score = parseFloat(element.score);
-                    console.log(`%%% Stata score: ${score}`);
-                    scores.push(score);
+                    let name = element.class_name;
+
+                    let classNameList = [];
+                    list.forEach(element => {
+                        classNameList.push(`${userID}${element}`)
+                    });
+
+                    if (classNameList.includes(name)) {
+                        console.log(`%%% Stata score: ${score}`);
+                        console.log(`%%% Stata score Class: ${element.class_name}`);
+                        scores.push(score);
+                    }                    
             });
-        };
+        }
         return scores;
     }
 
     /**get exam time array */
     function getTimeArray() {
         const times = [];
-        if (exams.length>0) {
+        if (list.length > 0 && exams.length > 0) {
             exams.forEach(element => {
                     let time = parseFloat(element.time_min);
-                    console.log(`%%% Stata time: ${time}`);
-                    times.push(time);
+                    let name = element.class_name;
+
+                    let classNameList = [];
+                    list.forEach(element => {
+                        classNameList.push(`${userID}${element}`)
+                    });
+
+                    if (classNameList.includes(name)) {
+                        console.log(`%%% Stata time: ${time}`);
+                        console.log(`%%% Stata time Class: ${element.class_name}`);
+                        times.push(time);
+                    }                    
             });
-        };
+        }
         return times;
-    }
-
-
-    /**get exam list */
-    function getExams() {
-
-
-        if (toChartPaneExams != null) {
-
-            /* let concatExams = []
-            let examsArrays = toChartPaneExams();
-            examsArrays.forEach(element => {
-                concatExams.concat(element);
-            });
-
- */
-            setExams(toChartPaneExams);
-            console.log(`chart pane exams: ${exams}`)
-        }
-        else {
-            console.log(`Null To Chart Pane Exams`);
-        }
-
     }
 
     console.log(exams);
 
     //TEST GET DATA EXAMS
-    /*     async function getExamData(){
-            //TEST HARD VALUE
-            const className = "CS633SPRING2020";
-    
-    
-            try {
-                //const response = await fetch(`http://localhost:4000/exams/${userID}${className}`);
-    
-                //TEST
-                const response = await fetch(`http://localhost:4000/exams`);
-    
-                const json = await response.json();
-                console.log(json);
-                setExams(json);
-            } catch (err) {
-                console.log(err);
-            }
-        }
-        useEffect(() => getExamData, []);
-        console.log(`CHART PANE EXAMS GET DATA ${exams}`);
-        console.log(exams); */
-
-    /**CLASS LIST TO SHOW CHART FOR */
-
-    //const [classDataUpload, setClassDataUpload] = useState([]);
-
     function chartData(classArray, colorArray) {
 
         console.log(`TESTING: CHART PANE CHART DATA: To Chart Pane List: ${toChartPaneList()}`);
@@ -294,19 +338,6 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
         } else {
             testOnStart = classArray;
         }
-        /*         for (let index = 0; index < classArray.length; index++) {
-                    if (!getExams.includes(classArray[index])) {
-                        setClassDataUpload([...classDataUpload, classArray[index]]);
-                    }
-                }
-                for (let index = 0; index < classDataUpload.length; index++) {
-                    if (!classArray.includes(classDataUpload[index])) {
-                        setClassDataUpload(classDataUpload.splice(index, classDataUpload[index]));
-                    }
-        
-                }
-        
-                console.log(`Class Data Upload: ` + classDataUpload); */
 
         let data = [];
 
@@ -332,48 +363,6 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
         return testChart;
     }
 
-
-
-
-    /*  const [classDataUpload, setClassDataUpload] = useState([]);
- 
-     function chartData(classArray, colorArray) {
-         for (let index = 0; index < classArray.length; index++) {
-             if (!classDataUpload.includes(classArray[index])) {
-                 setClassDataUpload([...classDataUpload, classArray[index]]);
-             }
-         }
-         for (let index = 0; index < classDataUpload.length; index++) {
-             if (!classArray.includes(classDataUpload[index])) {
-                 setClassDataUpload(classDataUpload.splice(index, classDataUpload[index]));
-             }
- 
-         }
- 
-         console.log(`Class Data Upload: ` + classDataUpload);
- 
-         let data = [];
- 
-         for (let index = 0; index < classArray.length; index++) {
- 
-             if (classArray[index] != ``) {
-                 console.log(`classArray index to make dataset:  ` + classArray[index]);
- 
-                 data.push(makeDataset(toChartPaneList(), userID, exams, classArray[index], colorArray[index]));
-                 //data.push(makeDataset(toChartPane(), , classArray[index], colorArray[index]));
-             }
- 
-         }
-         console.log(`TEST CHART DATA: ` + data);
-         let testChart = {
-             datasets: data
- 
-         };
- 
- 
-         return testChart;
-     }
-  */
 
 
     return (

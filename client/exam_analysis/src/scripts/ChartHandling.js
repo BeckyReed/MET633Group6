@@ -177,7 +177,7 @@ function downloadPDF(datasetSize, standDevScore, standDevTime, correlation) {
     pdf.addImage(canvasImage, 'JPEG', 10, 15, 270, 140);
 
 
-    const headers = ["Statistic", "Value", "Statistic", "Value"];
+    const headers = ["Statistic", "Value", "Quadrants", "%"];
 
     const data = [
         [`Dataset Size: `, `${datasetSize}`, `% in Q1 (Genius): `, `x`],
