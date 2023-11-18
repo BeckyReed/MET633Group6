@@ -167,7 +167,7 @@ function makeDataset(classesShown, userId, examData, classKey, color) {
 
 
 //Make PDF with jsPDF
-function downloadPDF(datasetSize, standDevScore, standDevTime, correlation) {
+function downloadPDF(datasetSize, standDevScore, standDevTime, correlation, quad1Per, quad2Per, quad3Per, quad4Per) {
     const canvas = document.getElementById('scatterChart');
 
     const canvasImage = canvas.toDataURL('image/jpeg', 1.0);
@@ -180,10 +180,10 @@ function downloadPDF(datasetSize, standDevScore, standDevTime, correlation) {
     const headers = ["Statistic", "Value", "Quadrants", "%"];
 
     const data = [
-        [`Dataset Size: `, `${datasetSize}`, `% in Q1 (Genius): `, `x`],
-        [`Standard Deviation (Score): `, `${standDevScore}`, `% in Q2 (Expected Behavior): `, `x`],
-        [`Standard Deviation (Time): `, `${standDevTime}`, `% in Q3 (Over-Confident): `, `x`],
-        [`Correlation: `, `${correlation}`, `% in Q4 (Need External Help): `, `x`]
+        [`Dataset Size: `, `${datasetSize}`, `% in Q1 (Genius): `, `${quad1Per} %`],
+        [`Standard Deviation (Score): `, `${standDevScore}`, `% in Q2 (Expected Behavior): `, `${quad2Per} %`],
+        [`Standard Deviation (Time): `, `${standDevTime}`, `% in Q3 (Over-Confident): `, `${quad3Per} %`],
+        [`Correlation: `, `${correlation}`, `% in Q4 (Need External Help): `, `${quad4Per} %`]
     ];
 
     const options = {

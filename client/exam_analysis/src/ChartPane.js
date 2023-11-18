@@ -12,7 +12,7 @@ import { standardDeviation, sampleCorrelation } from "simple-statistics";
 ChartJS.register(
     Colors,
     LineElement
-    );
+);
 
 const bgColor = {
     id: 'bgColor',
@@ -29,10 +29,10 @@ const bgColor = {
 const hQuadrentLine = {
     id: 'hQuadrentLine',
     beforeDatasetsDraw(chart, args, pluinOptions) {
-        const{ 
-            ctx, 
-            chartArea: {top, right, bottom, left, width, height}, 
-            scales: {x,y} 
+        const {
+            ctx,
+            chartArea: { top, right, bottom, left, width, height },
+            scales: { x, y }
         } = chart;
         ctx.save();
 
@@ -40,23 +40,23 @@ const hQuadrentLine = {
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'gray';
         ctx.setLineDash([6, 6]);
-        ctx.moveTo(left, ((bottom+top)/2));
-        ctx.lineTo(right, ((bottom+top)/2));
+        ctx.moveTo(left, ((bottom + top) / 2));
+        ctx.lineTo(right, ((bottom + top) / 2));
         ctx.stroke();
         ctx.restore();
 
         ctx.setLineDash([]);
-        
+
     }
 };
 
 const vQuadrentLine = {
     id: 'vQuadrentLine',
     beforeDatasetsDraw(chart, args, pluinOptions) {
-        const{ 
-            ctx, 
-            chartArea: {top, right, bottom, left, width, height}, 
-            scales: {x,y} 
+        const {
+            ctx,
+            chartArea: { top, right, bottom, left, width, height },
+            scales: { x, y }
         } = chart;
         ctx.save();
 
@@ -64,15 +64,17 @@ const vQuadrentLine = {
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'gray';
         ctx.setLineDash([6, 6]);
-        ctx.moveTo(((width/2)+left), top);
-        ctx.lineTo(((width/2)+left), bottom);
+        ctx.moveTo(((width / 2) + left), top);
+        ctx.lineTo(((width / 2) + left), bottom);
         ctx.stroke();
         ctx.restore();
 
         ctx.setLineDash([]);
-        
+
     }
 };
+
+
 
 
 
@@ -100,11 +102,11 @@ const options = {
                     size: 15
                 }
             },
-            afterDataLimits: function(axis) {
-                    axis.max = 100;
+            afterDataLimits: function (axis) {
+                axis.max = 100;
                 if (axis.min >= 5) {
-                    axis.min -=1;
-                }                
+                    axis.min -= 1;
+                }
             }
         },
         x: {
@@ -124,16 +126,16 @@ const options = {
                     size: 15
                 }
             },
-            afterDataLimits: function(axis) {
+            afterDataLimits: function (axis) {
                 if (axis.min >= 10) {
-                    axis.min -=10;
+                    axis.min -= 10;
                 }
-                axis.max +=1;
+                axis.max += 1;
             }
         }
     },
     plugins: {
-        
+
         colors: {
             forceOverride: true
         },
@@ -153,6 +155,8 @@ const options = {
 
 
 function ChartPane({ toChartPaneList, toChartPaneExams }) {
+    /**User ID */
+    const [userID, setUserID] = useState(1);
 
     /**EXAM LIST FROM DB */
     const [exams, setExams] = useState([]);
@@ -168,16 +172,65 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
     const [standDevTime, setStandDevTime] = useState();
     /**EXAM STATS Correlation */
     const [correlation, setCorrelation] = useState();
-    /**User ID */
-    const [userID, setUserID] = useState(1);
+
+    /**EXAM STATS Quadrant 1 */
+    const [quad1Count, setQuad1Count] = useState();
+    /**EXAM STATS Quadrant 2 */
+    const [quad2Count, setQuad2Count] = useState();
+    /**EXAM STATS Quadrant 3 */
+    const [quad3Count, setQuad3Count] = useState();
+    /**EXAM STATS Quadrant 4 */
+    const [quad4Count, setQuad4Count] = useState();
+
+    /**EXAM STATS % Quadrant 1 */
+    const [quad1Per, setQuad1Per] = useState();
+    /**EXAM STATS % Quadrant 2 */
+    const [quad2Per, setQuad2Per] = useState();
+    /**EXAM STATS % Quadrant 3 */
+    const [quad3Per, setQuad3Per] = useState();
+    /**EXAM STATS % Quadrant 4 */
+    const [quad4Per, setQuad4Per] = useState();
+
+
+
+    useEffect(() => {
+        if(datasetSize == 0 || quad1Count == 0) {
+            setQuad1Per(0);
+        } else {
+            setQuad1Per(((quad1Count*100)/datasetSize).toFixed(2));
+        }
+    },[quad1Count]);
+    useEffect(() => {
+        if(datasetSize == 0 || quad2Count == 0) {
+            setQuad2Per(0);
+        } else {
+            setQuad2Per(((quad2Count*100)/datasetSize).toFixed(2));
+        }
+    },[quad2Count]);
+    useEffect(() => {
+        if(datasetSize == 0 || quad3Count == 0) {
+            setQuad3Per(0);
+        } else {
+            setQuad3Per(((quad3Count*100)/datasetSize).toFixed(2));
+        }
+    },[quad3Count]);
+    useEffect(() => {
+        if(datasetSize == 0 || quad4Count == 0) {
+            setQuad4Per(0);
+        } else {
+            setQuad4Per(((quad4Count*100)/datasetSize).toFixed(2));
+        }
+    },[quad4Count]);
+
+
 
     useEffect(() => {
         setExams(toChartPaneExams);
-    },[toChartPaneExams]);
+    }, [toChartPaneExams]);
 
     useEffect(() => {
         setList(toChartPaneList);
-    },[toChartPaneList]);
+    }, [toChartPaneList]);
 
 
     useEffect(() => {
@@ -190,32 +243,97 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
         setDatasetSize(scores.length);
 
         let resultSDscore;
-        if (scores.length>0){
+        if (scores.length > 0) {
             resultSDscore = standardDeviation(getScoreArray()).toFixed(2);
         }
         setStandDevScore(resultSDscore);
 
         let resultSDtime;
-        if (time.length>0){
+        if (time.length > 0) {
             resultSDtime = standardDeviation(getTimeArray()).toFixed(2);
         }
         setStandDevTime(resultSDtime);
 
         let resultCor;
-        if (scores.length>0){
+        if (scores.length > 0) {
             resultCor = sampleCorrelation(getScoreArray(), getTimeArray()).toFixed(2);
         }
         setCorrelation(resultCor);
 
+    }, [list]);
+
+    useEffect(() => {
+
+        const scores = getScoreArray();
+        const time = getTimeArray();
+        /**Quadrants */
+        /**Top half? */
+        let yMin = Math.floor((Math.min(...scores) - 1) / 5) * 5;
+        let yMax = 100;
+        let yMid = ((yMax - yMin) / 2) + yMin;
+        let xMin = Math.floor((Math.min(...time) - 10) / 10) * 10;
+        let xMax = Math.ceil((Math.max(...time) + 1) / 10) * 10;
+        let xMid = ((xMax - xMin) / 2) + xMin;
+        console.log(`%%% ChartPane: useEffect Stats: list: Y Min = ${yMin}`);
+        console.log(`%%% ChartPane: useEffect Stats: list: Y Max = ${yMax}`);
+        console.log(`%%% ChartPane: useEffect Stats: list: Y Mid = ${yMid}`);
+        console.log(`%%% ChartPane: useEffect Stats: list: X Min = ${xMin}`);
+        console.log(`%%% ChartPane: useEffect Stats: list: X Max = ${xMax}`);
+        console.log(`%%% ChartPane: useEffect Stats: list: X Mid = ${xMid}`);
 
 
+        let resQ1 = 0;
+        let resQ2 = 0;
+        let resQ3 = 0;
+        let resQ4 = 0;
+        exams.forEach(element => {
+            let score = parseFloat(element.score);
+            let time = parseFloat(element.time_min);
+            let name = element.class_name;
+
+            let classNameList = [];
+            list.forEach(element => {
+                classNameList.push(`${userID}${element}`)
+            });
+
+            if (classNameList.includes(name)) {
+
+                /**Top half */
+                if (score > yMid) {
+                    //Q1 (Left)
+                    if (time < xMid) {
+                        resQ1 = resQ1 + 1;
+                    }
+                    //Q2 (Right)
+                    else {
+                        resQ2 = resQ2 + 1;
+                    }
+                }
+                /**Bottom half */
+                else {
+                    //Q3 (Left)
+                    if (time < xMid) {
+                        resQ3 = resQ3 + 1;
+                    }
+                    //Q4 (Right)
+                    else {
+                        resQ4 = resQ4 + 1;
+                    }
+                }
+
+            }
+        });
+        setQuad1Count(resQ1);
+        setQuad2Count(resQ2);
+        setQuad3Count(resQ3);
+        setQuad4Count(resQ4);
     }, [list]);
 
 
 
     useEffect(() => {
 
-        console.log(`%%% ChartPane: useEffect Stats: list: ${list}`);
+        console.log(`%%% ChartPane: useEffect Stats: exams: ${list}`);
 
         const scores = getScoreArray();
         const time = getTimeArray();
@@ -223,31 +341,98 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
         setDatasetSize(scores.length);
 
         let resultSDscore;
-        if (scores.length>0){
+        if (scores.length > 0) {
             resultSDscore = standardDeviation(getScoreArray()).toFixed(2);
         }
         setStandDevScore(resultSDscore);
 
         let resultSDtime;
-        if (time.length>0){
+        if (time.length > 0) {
             resultSDtime = standardDeviation(getTimeArray()).toFixed(2);
         }
         setStandDevTime(resultSDtime);
 
         let resultCor;
-        if (scores.length>0){
+        if (scores.length > 0) {
             resultCor = sampleCorrelation(getScoreArray(), getTimeArray()).toFixed(2);
         }
         setCorrelation(resultCor);
 
-
-
     }, [exams]);
 
-   /*  useEffect(() => {
+
+    useEffect(() => {
+
         const scores = getScoreArray();
-        setDatasetSize(scores.length);
-    }, [exams]); */
+        const time = getTimeArray();
+        /**Quadrants */
+        /**Mid Points */
+        let yMin = Math.floor((Math.min(...scores) - 1) / 5) * 5;
+        let yMax = 100;
+        let yMid = ((yMax - yMin) / 2) + yMin;
+        let xMin = Math.floor((Math.min(...time) - 10) / 10) * 10;
+        let xMax = Math.ceil((Math.max(...time) + 1) / 10) * 10;
+        let xMid = ((xMax - xMin) / 2) + xMin;
+        console.log(`%%% ChartPane: useEffect Stats: exams: Y Min = ${yMin}`);
+        console.log(`%%% ChartPane: useEffect Stats: exams: Y Max = ${yMax}`);
+        console.log(`%%% ChartPane: useEffect Stats: exams: Y Mid = ${yMid}`);
+        console.log(`%%% ChartPane: useEffect Stats: exams: X Min = ${xMin}`);
+        console.log(`%%% ChartPane: useEffect Stats: exams: X Max = ${xMax}`);
+        console.log(`%%% ChartPane: useEffect Stats: exams: X Mid = ${xMid}`);
+
+        let resQ1 = 0;
+        let resQ2 = 0;
+        let resQ3 = 0;
+        let resQ4 = 0;
+
+        exams.forEach(element => {
+            let score = parseFloat(element.score);
+            let time = parseFloat(element.time_min);
+            let name = element.class_name;
+
+            let classNameList = [];
+            list.forEach(element => {
+                classNameList.push(`${userID}${element}`)
+            });
+
+            if (classNameList.includes(name)) {
+
+                /**Top half */
+                if (score > yMid) {
+                    //Q1 (Left)
+                    if (time < xMid) {
+                        resQ1 = resQ1 + 1;
+                    }
+                    //Q2 (Right)
+                    else {
+                        resQ2 = resQ2 + 1;
+                    }
+                }
+                /**Bottom half */
+                else {
+                    //Q3 (Left)
+                    if (time < xMid) {
+                        resQ3 = resQ3 + 1;
+                    }
+                    //Q4 (Right)
+                    else {
+                        resQ4 = resQ4 + 1;
+                    }
+                }
+
+            }
+        });
+
+        setQuad1Count(resQ1);
+        setQuad2Count(resQ2);
+        setQuad3Count(resQ3);
+        setQuad4Count(resQ4);
+    }, [exams]);
+
+    /*  useEffect(() => {
+         const scores = getScoreArray();
+         setDatasetSize(scores.length);
+     }, [exams]); */
 
     /* useEffect(() => {
         const scores = getScoreArray();
@@ -278,25 +463,25 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
     }, [exams]);
  */
 
-    
+
     /**get exam score array */
     function getScoreArray() {
         const scores = [];
         if (list.length > 0 && exams.length > 0) {
             exams.forEach(element => {
-                    let score = parseFloat(element.score);
-                    let name = element.class_name;
+                let score = parseFloat(element.score);
+                let name = element.class_name;
 
-                    let classNameList = [];
-                    list.forEach(element => {
-                        classNameList.push(`${userID}${element}`)
-                    });
+                let classNameList = [];
+                list.forEach(element => {
+                    classNameList.push(`${userID}${element}`)
+                });
 
-                    if (classNameList.includes(name)) {
-                        console.log(`%%% Stata score: ${score}`);
-                        console.log(`%%% Stata score Class: ${element.class_name}`);
-                        scores.push(score);
-                    }                    
+                if (classNameList.includes(name)) {
+                    console.log(`%%% Stata score: ${score}`);
+                    console.log(`%%% Stata score Class: ${element.class_name}`);
+                    scores.push(score);
+                }
             });
         }
         return scores;
@@ -307,19 +492,19 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
         const times = [];
         if (list.length > 0 && exams.length > 0) {
             exams.forEach(element => {
-                    let time = parseFloat(element.time_min);
-                    let name = element.class_name;
+                let time = parseFloat(element.time_min);
+                let name = element.class_name;
 
-                    let classNameList = [];
-                    list.forEach(element => {
-                        classNameList.push(`${userID}${element}`)
-                    });
+                let classNameList = [];
+                list.forEach(element => {
+                    classNameList.push(`${userID}${element}`)
+                });
 
-                    if (classNameList.includes(name)) {
-                        console.log(`%%% Stata time: ${time}`);
-                        console.log(`%%% Stata time Class: ${element.class_name}`);
-                        times.push(time);
-                    }                    
+                if (classNameList.includes(name)) {
+                    console.log(`%%% Stata time: ${time}`);
+                    console.log(`%%% Stata time Class: ${element.class_name}`);
+                    times.push(time);
+                }
             });
         }
         return times;
@@ -372,15 +557,15 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
             <Scatter id="scatterChart" options={options} plugins={[bgColor, hQuadrentLine, vQuadrentLine]} data={chartData(toChartPaneList(), colorArray)} />
             <div>
                 <h3 id="statDatasetSize">Size of Dataset: {datasetSize}</h3>
-                <h4 id="percentInQ1">% in Q1 (Genius): {}</h4>
-                <h4 id="percentInQ2">% in Q2 (Expected Behavior): {}</h4>
-                <h4 id="percentInQ3">% in Q3 (Over-Confident): {}</h4>
-                <h4 id="percentInQ4">% in Q4 (Need External Help): {}</h4>
+                <h4 id="percentInQ1">% in Q1 (Genius): {quad1Per} %</h4>
+                <h4 id="percentInQ2">% in Q2 (Expected Behavior): {quad2Per} %</h4>
+                <h4 id="percentInQ3">% in Q3 (Over-Confident): {quad3Per} %</h4>
+                <h4 id="percentInQ4">% in Q4 (Need External Help): {quad4Per} %</h4>
                 <h3 id="statStandardDeviationScore">Standard Deviation (Score): {standDevScore}</h3>
                 <h3 id="statStandardDeviationTime">Standard Deviation (Time): {standDevTime}</h3>
                 <h3 id="statCorrelation">Correlation: {correlation}</h3>
             </div>
-            <button className="download" onClick={() => downloadPDF(datasetSize, standDevScore, standDevTime, correlation)}>Download PDF</button>
+            <button className="download" onClick={() => downloadPDF(datasetSize, standDevScore, standDevTime, correlation, quad1Per, quad2Per, quad3Per, quad4Per)}>Download PDF</button>
         </div>
     );
 }
