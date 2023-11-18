@@ -39,10 +39,13 @@ const hQuadrentLine = {
         ctx.beginPath();
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'gray';
+        ctx.setLineDash([6, 6]);
         ctx.moveTo(left, ((bottom+top)/2));
         ctx.lineTo(right, ((bottom+top)/2));
         ctx.stroke();
         ctx.restore();
+
+        ctx.setLineDash([]);
         
     }
 };
@@ -60,10 +63,13 @@ const vQuadrentLine = {
         ctx.beginPath();
         ctx.lineWidth = 2;
         ctx.strokeStyle = 'gray';
+        ctx.setLineDash([6, 6]);
         ctx.moveTo(((width/2)+left), top);
         ctx.lineTo(((width/2)+left), bottom);
         ctx.stroke();
         ctx.restore();
+
+        ctx.setLineDash([]);
         
     }
 };
@@ -150,8 +156,12 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
 
     /**EXAM LIST FROM DB */
     const [exams, setExams] = useState([]);
-    /**EXAM STATS Standard Deviation */
-    const [standDev, setStandDev] = useState();
+        /**EXAM STATS Dataset Size*/
+        const [datasetSize, setDatasetSize] = useState();
+    /**EXAM STATS Standard Deviation SCORE*/
+    const [standDevScore, setStandDevScore] = useState();
+    /**EXAM STATS Standard Deviation TIME*/
+    const [standDevTime, setStandDevTime] = useState();
     /**EXAM STATS Correlation */
     const [correlation, setCorrelation] = useState();
     /**User ID */
@@ -163,20 +173,33 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
 
     useEffect(() => {
         const scores = getScoreArray();
-        let result;
-        if (scores.length>0){
-            result = standardDeviation(getScoreArray()).toPrecision(5);
-        }
-        setStandDev(result);
+        setDatasetSize(scores.length);
     }, [exams]);
 
+    useEffect(() => {
+        const scores = getScoreArray();
+        let result;
+        if (scores.length>0){
+            result = standardDeviation(getScoreArray()).toFixed(2);
+        }
+        setStandDevScore(result);
+    }, [exams]);
+
+    useEffect(() => {
+        const time = getTimeArray();
+        let result;
+        if (time.length>0){
+            result = standardDeviation(getTimeArray()).toFixed(2);
+        }
+        setStandDevTime(result);
+    }, [exams]);
 
     useEffect(() => {
         const scores = getScoreArray();
         // const times = getTimeArray();
         let result;
         if (scores.length>0){
-            result = sampleCorrelation(getScoreArray(), getTimeArray()).toPrecision(5);
+            result = sampleCorrelation(getScoreArray(), getTimeArray()).toFixed(2);
         }
         setCorrelation(result);
     }, [exams]);
@@ -359,10 +382,16 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
             {/* <div>{toChartPane()}</div> */}
             <Scatter id="scatterChart" options={options} plugins={[bgColor, hQuadrentLine, vQuadrentLine]} data={chartData(toChartPaneList(), colorArray)} />
             <div>
-                <h3 id="statStandardDeviation">Standard Deviation (Score): {standDev}</h3>
+                <h3 id="statDatasetSize">Size of Dataset: {datasetSize}</h3>
+                <h4 id="percentInQ1">% in Q1 (Genius): {}</h4>
+                <h4 id="percentInQ2">% in Q2 (Expected Behavior): {}</h4>
+                <h4 id="percentInQ3">% in Q3 (Over-Confident): {}</h4>
+                <h4 id="percentInQ4">% in Q4 (Need External Help): {}</h4>
+                <h3 id="statStandardDeviationScore">Standard Deviation (Score): {standDevScore}</h3>
+                <h3 id="statStandardDeviationTime">Standard Deviation (Time): {standDevTime}</h3>
                 <h3 id="statCorrelation">Correlation: {correlation}</h3>
             </div>
-            <button className="download" onClick={() => downloadPDF(standDev, correlation)}>Download PDF</button>
+            <button className="download" onClick={() => downloadPDF(datasetSize, standDevScore, standDevTime, correlation)}>Download PDF</button>
         </div>
     );
 }
