@@ -1,6 +1,7 @@
 import { Scatter } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js";
 import { jsPDF } from "jspdf";
+import {autoTable} from "jspdf-autotable"
 
 /** Test Data */
 const test_data = [
@@ -166,16 +167,36 @@ function makeDataset(classesShown, userId, examData, classKey, color) {
 
 
 //Make PDF with jsPDF
-function downloadPDF(standardDeviation, correlation) {
+function downloadPDF(datasetSize, standDevScore, standDevTime, correlation, quad1Per, quad2Per, quad3Per, quad4Per) {
     const canvas = document.getElementById('scatterChart');
 
     const canvasImage = canvas.toDataURL('image/jpeg', 1.0);
 
     const pdf = new jsPDF('landscape');
-    pdf.setFontSize(20);
-    pdf.addImage(canvasImage, 'JPEG', 10, 15, 280, 150);
-    pdf.text(`Standard Deviation (Score): ${standardDeviation}`, 20, 175);
-    pdf.text(`Correlation: ${correlation}`, 20, 185);
+    pdf.setFontSize(16);
+    pdf.addImage(canvasImage, 'JPEG', 10, 15, 270, 140);
+
+
+    const headers = ["Statistic", "Value", "Quadrants", "%"];
+
+    const data = [
+        [`Dataset Size: `, `${datasetSize}`, `% in Q1 (Genius): `, `${quad1Per} %`],
+        [`Standard Deviation (Score): `, `${standDevScore}`, `% in Q2 (Expected Behavior): `, `${quad2Per} %`],
+        [`Standard Deviation (Time): `, `${standDevTime}`, `% in Q3 (Over-Confident): `, `${quad3Per} %`],
+        [`Correlation: `, `${correlation}`, `% in Q4 (Need External Help): `, `${quad4Per} %`]
+    ];
+
+    const options = {
+        startY: 155,
+        tableWidth: 'wrap'
+    }
+
+    pdf.autoTable(headers, data, options);
+
+/*     pdf.text(`Dataset Size: ${datasetSize}`, 20, 170);
+    pdf.text(`Standard Deviation (Score): ${standDevScore}`, 20, 176);
+    pdf.text(`Standard Deviation (Time): ${standDevTime}`, 20, 182);
+    pdf.text(`Correlation: ${correlation}`, 20, 188); */
     pdf.save('Exam Analysis');
 }
 
