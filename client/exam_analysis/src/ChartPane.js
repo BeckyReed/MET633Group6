@@ -563,7 +563,7 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
                 <h4 id="percentInQ4">% in Q4 (Need External Help): {quad4Per} %</h4>
                 <h3 id="statStandardDeviationScore">Standard Deviation (Score): {standDevScore}</h3>
                 <h3 id="statStandardDeviationTime">Standard Deviation (Time): {standDevTime}</h3>
-                <h3 id="statCorrelation">Correlation: {correlation}</h3>
+                <h3 id="statCorrelation">Correlation (Score)vs(Time): {correlation}</h3>
             </div>
             <button className="download" onClick={() => downloadPDF(datasetSize, standDevScore, standDevTime, correlation, quad1Per, quad2Per, quad3Per, quad4Per)}>Download PDF</button>
         </div>
