@@ -183,7 +183,7 @@ function downloadPDF(datasetSize, standDevScore, standDevTime, correlation, quad
         [`Dataset Size: `, `${datasetSize}`, `% in Q1 (Genius): `, `${quad1Per} %`],
         [`Standard Deviation (Score): `, `${standDevScore}`, `% in Q2 (Expected Behavior): `, `${quad2Per} %`],
         [`Standard Deviation (Time): `, `${standDevTime}`, `% in Q3 (Over-Confident): `, `${quad3Per} %`],
-        [`Correlation: `, `${correlation}`, `% in Q4 (Need External Help): `, `${quad4Per} %`]
+        [`Correlation (Score)vs(Time): `, `${correlation}`, `% in Q4 (Need External Help): `, `${quad4Per} %`]
     ];
 
     const options = {
