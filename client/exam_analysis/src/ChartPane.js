@@ -192,37 +192,32 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
     const [quad4Per, setQuad4Per] = useState();
 
 
-
     useEffect(() => {
         if(datasetSize == 0 || quad1Count == 0) {
             setQuad1Per(0);
         } else {
             setQuad1Per(((quad1Count*100)/datasetSize).toFixed(2));
         }
-    },[quad1Count]);
-    useEffect(() => {
+
         if(datasetSize == 0 || quad2Count == 0) {
             setQuad2Per(0);
         } else {
             setQuad2Per(((quad2Count*100)/datasetSize).toFixed(2));
         }
-    },[quad2Count]);
-    useEffect(() => {
+
         if(datasetSize == 0 || quad3Count == 0) {
             setQuad3Per(0);
         } else {
             setQuad3Per(((quad3Count*100)/datasetSize).toFixed(2));
         }
-    },[quad3Count]);
-    useEffect(() => {
+
         if(datasetSize == 0 || quad4Count == 0) {
             setQuad4Per(0);
         } else {
             setQuad4Per(((quad4Count*100)/datasetSize).toFixed(2));
         }
-    },[quad4Count]);
 
-
+    }, [quad1Count, quad2Count, quad3Count, quad4Count]);
 
     useEffect(() => {
         setExams(toChartPaneExams);
@@ -232,55 +227,31 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
         setList(toChartPaneList);
     }, [toChartPaneList]);
 
-
     useEffect(() => {
-
         console.log(`%%% ChartPane: useEffect Stats: list: ${list}`);
 
         const scores = getScoreArray();
         const time = getTimeArray();
-
-        setDatasetSize(scores.length);
-
-        let resultSDscore;
-        if (scores.length > 0) {
-            resultSDscore = standardDeviation(getScoreArray()).toFixed(2);
-        }
-        setStandDevScore(resultSDscore);
-
-        let resultSDtime;
-        if (time.length > 0) {
-            resultSDtime = standardDeviation(getTimeArray()).toFixed(2);
-        }
-        setStandDevTime(resultSDtime);
-
-        let resultCor;
-        if (scores.length > 0) {
-            resultCor = sampleCorrelation(getScoreArray(), getTimeArray()).toFixed(2);
-        }
-        setCorrelation(resultCor);
-
-    }, [list]);
+        setStats(scores, time);
+        
+    }, [list, exams]);
 
     useEffect(() => {
-
         const scores = getScoreArray();
         const time = getTimeArray();
-        /**Quadrants */
-        /**Top half? */
+        //Quadrants
         let yMin = Math.floor((Math.min(...scores) - 1) / 5) * 5;
         let yMax = 100;
         let yMid = ((yMax - yMin) / 2) + yMin;
         let xMin = Math.floor((Math.min(...time) - 10) / 10) * 10;
         let xMax = Math.ceil((Math.max(...time) + 1) / 10) * 10;
         let xMid = ((xMax - xMin) / 2) + xMin;
-        console.log(`%%% ChartPane: useEffect Stats: list: Y Min = ${yMin}`);
-        console.log(`%%% ChartPane: useEffect Stats: list: Y Max = ${yMax}`);
-        console.log(`%%% ChartPane: useEffect Stats: list: Y Mid = ${yMid}`);
-        console.log(`%%% ChartPane: useEffect Stats: list: X Min = ${xMin}`);
-        console.log(`%%% ChartPane: useEffect Stats: list: X Max = ${xMax}`);
-        console.log(`%%% ChartPane: useEffect Stats: list: X Mid = ${xMid}`);
-
+        console.log(`%%% ChartPane: useEffect Stats: Y Min = ${yMin}`);
+        console.log(`%%% ChartPane: useEffect Stats: Y Max = ${yMax}`);
+        console.log(`%%% ChartPane: useEffect Stats: Y Mid = ${yMid}`);
+        console.log(`%%% ChartPane: useEffect Stats: X Min = ${xMin}`);
+        console.log(`%%% ChartPane: useEffect Stats: X Max = ${xMax}`);
+        console.log(`%%% ChartPane: useEffect Stats: X Mid = ${xMid}`);
 
         let resQ1 = 0;
         let resQ2 = 0;
@@ -298,7 +269,7 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
 
             if (classNameList.includes(name)) {
 
-                /**Top half */
+                //Top half 
                 if (score > yMid) {
                     //Q1 (Left)
                     if (time < xMid) {
@@ -309,7 +280,7 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
                         resQ2 = resQ2 + 1;
                     }
                 }
-                /**Bottom half */
+                //Bottom half 
                 else {
                     //Q3 (Left)
                     if (time < xMid) {
@@ -327,141 +298,7 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
         setQuad2Count(resQ2);
         setQuad3Count(resQ3);
         setQuad4Count(resQ4);
-    }, [list]);
-
-
-
-    useEffect(() => {
-
-        console.log(`%%% ChartPane: useEffect Stats: exams: ${list}`);
-
-        const scores = getScoreArray();
-        const time = getTimeArray();
-
-        setDatasetSize(scores.length);
-
-        let resultSDscore;
-        if (scores.length > 0) {
-            resultSDscore = standardDeviation(getScoreArray()).toFixed(2);
-        }
-        setStandDevScore(resultSDscore);
-
-        let resultSDtime;
-        if (time.length > 0) {
-            resultSDtime = standardDeviation(getTimeArray()).toFixed(2);
-        }
-        setStandDevTime(resultSDtime);
-
-        let resultCor;
-        if (scores.length > 0) {
-            resultCor = sampleCorrelation(getScoreArray(), getTimeArray()).toFixed(2);
-        }
-        setCorrelation(resultCor);
-
-    }, [exams]);
-
-
-    useEffect(() => {
-
-        const scores = getScoreArray();
-        const time = getTimeArray();
-        /**Quadrants */
-        /**Mid Points */
-        let yMin = Math.floor((Math.min(...scores) - 1) / 5) * 5;
-        let yMax = 100;
-        let yMid = ((yMax - yMin) / 2) + yMin;
-        let xMin = Math.floor((Math.min(...time) - 10) / 10) * 10;
-        let xMax = Math.ceil((Math.max(...time) + 1) / 10) * 10;
-        let xMid = ((xMax - xMin) / 2) + xMin;
-        console.log(`%%% ChartPane: useEffect Stats: exams: Y Min = ${yMin}`);
-        console.log(`%%% ChartPane: useEffect Stats: exams: Y Max = ${yMax}`);
-        console.log(`%%% ChartPane: useEffect Stats: exams: Y Mid = ${yMid}`);
-        console.log(`%%% ChartPane: useEffect Stats: exams: X Min = ${xMin}`);
-        console.log(`%%% ChartPane: useEffect Stats: exams: X Max = ${xMax}`);
-        console.log(`%%% ChartPane: useEffect Stats: exams: X Mid = ${xMid}`);
-
-        let resQ1 = 0;
-        let resQ2 = 0;
-        let resQ3 = 0;
-        let resQ4 = 0;
-
-        exams.forEach(element => {
-            let score = parseFloat(element.score);
-            let time = parseFloat(element.time_min);
-            let name = element.class_name;
-
-            let classNameList = [];
-            list.forEach(element => {
-                classNameList.push(`${userID}${element}`)
-            });
-
-            if (classNameList.includes(name)) {
-
-                /**Top half */
-                if (score > yMid) {
-                    //Q1 (Left)
-                    if (time < xMid) {
-                        resQ1 = resQ1 + 1;
-                    }
-                    //Q2 (Right)
-                    else {
-                        resQ2 = resQ2 + 1;
-                    }
-                }
-                /**Bottom half */
-                else {
-                    //Q3 (Left)
-                    if (time < xMid) {
-                        resQ3 = resQ3 + 1;
-                    }
-                    //Q4 (Right)
-                    else {
-                        resQ4 = resQ4 + 1;
-                    }
-                }
-
-            }
-        });
-
-        setQuad1Count(resQ1);
-        setQuad2Count(resQ2);
-        setQuad3Count(resQ3);
-        setQuad4Count(resQ4);
-    }, [exams]);
-
-    /*  useEffect(() => {
-         const scores = getScoreArray();
-         setDatasetSize(scores.length);
-     }, [exams]); */
-
-    /* useEffect(() => {
-        const scores = getScoreArray();
-        let result;
-        if (scores.length>0){
-            result = standardDeviation(getScoreArray()).toFixed(2);
-        }
-        setStandDevScore(result);
-    }, [exams]); */
-
-    /* useEffect(() => {
-        const time = getTimeArray();
-        let result;
-        if (time.length>0){
-            result = standardDeviation(getTimeArray()).toFixed(2);
-        }
-        setStandDevTime(result);
-    }, [exams]); */
-
-    /* useEffect(() => {
-        const scores = getScoreArray();
-        // const times = getTimeArray();
-        let result;
-        if (scores.length>0){
-            result = sampleCorrelation(getScoreArray(), getTimeArray()).toFixed(2);
-        }
-        setCorrelation(result);
-    }, [exams]);
- */
+    }, [list, exams]);
 
 
     /**get exam score array */
@@ -510,7 +347,37 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
         return times;
     }
 
-    console.log(exams);
+    /**set Stats states for useEffect */
+    function setStats (scoresArray, timeArray) {
+
+        setDatasetSize(scoresArray.length);
+
+        let resultSDscore;
+        if (scoresArray.length > 1) {
+            resultSDscore = standardDeviation(scoresArray).toFixed(2);
+        } else if (scoresArray.length == 1) {
+            resultSDscore = "sample size of one"
+        }
+        setStandDevScore(resultSDscore);
+
+        let resultSDtime;
+        if (timeArray.length > 1) {
+            resultSDtime = standardDeviation(timeArray).toFixed(2);
+        }  else if (scoresArray.length == 1) {
+            resultSDtime = "sample size of one"
+        }
+        setStandDevTime(resultSDtime);
+
+        let resultCor;
+        if (scoresArray.length > 1) {
+            resultCor = sampleCorrelation(scoresArray, timeArray).toFixed(2);
+        } else if (scoresArray.length == 1) {
+            resultCor = "sample size of one"
+        }
+        setCorrelation(resultCor);
+    }
+
+    // console.log(exams);
 
     //TEST GET DATA EXAMS
     function chartData(classArray, colorArray) {
@@ -531,20 +398,13 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
             if (testOnStart[index] != ``) {
                 console.log(`classArray index to make dataset:  ` + testOnStart[index]);
 
-
-
                 data.push(makeDataset(toChartPaneList(), userID, exams, testOnStart[index], colorArray[index]));
-                //data.push(makeDataset(toChartPane(), , classArray[index], colorArray[index]));
             }
-
         }
         console.log(`TEST CHART DATA: ` + data);
         let testChart = {
             datasets: data
-
         };
-
-
         return testChart;
     }
 
