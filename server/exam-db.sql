@@ -21,6 +21,7 @@ CREATE TABLE classes (
 CREATE TABLE exams (
 	exam_id INT GENERATED ALWAYS AS IDENTITY,
 	class_name VARCHAR (35) REFERENCES classes ON DELETE CASCADE,
+	project_group VARCHAR (35),
 	time_min NUMERIC NOT NULL,
 	score NUMERIC(6,2) NOT NULL,
 	experience BOOLEAN NOT NULL,
