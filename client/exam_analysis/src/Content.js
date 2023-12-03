@@ -104,9 +104,10 @@ function Content() {
     <div>
 
       <div className="Content">
-        <Tray isShowingGetData={showingGetData} onClickGetData={() => setShowingGetData(!showingGetData)} />
+        {/* <Tray isShowingGetData={showingGetData} onClickGetData={() => setShowingGetData(!showingGetData)} /> */}
 
-        {showingGetData ? <DataPane selctedToContent={selctedToContent} examsToContent={examsToContent} /> : null}
+        {/* {showingGetData ? <DataPane selctedToContent={selctedToContent} examsToContent={examsToContent} /> : null} */}
+        <DataPane selctedToContent={selctedToContent} examsToContent={examsToContent} />
 
         <Main contentToMainSelected={contentToMainSelected} contentToMainExams={contentToMainExams} />
       </div>

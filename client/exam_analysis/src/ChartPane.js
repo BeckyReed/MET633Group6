@@ -413,17 +413,22 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
         <div className="chart">
             
             <Scatter id="scatterChart" options={options} plugins={[bgColor, hQuadrentLine, vQuadrentLine]} data={chartData(toChartPaneList(), colorArray)} />
-            <div>
-                <h3 id="statDatasetSize">Size of Dataset: {datasetSize}</h3>
-                <h4 id="percentInQ1">% in Q1 (Genius): {quad1Per} %</h4>
-                <h4 id="percentInQ2">% in Q2 (Expected Behavior): {quad2Per} %</h4>
-                <h4 id="percentInQ3">% in Q3 (Over-Confident): {quad3Per} %</h4>
-                <h4 id="percentInQ4">% in Q4 (Need External Help): {quad4Per} %</h4>
-                <h3 id="statStandardDeviationScore">Standard Deviation (Score): {standDevScore}</h3>
-                <h3 id="statStandardDeviationTime">Standard Deviation (Time): {standDevTime}</h3>
-                <h3 id="statCorrelation">Correlation (Score)vs(Time): {correlation}</h3>
-            </div>
             <button className="download" onClick={() => downloadPDF(datasetSize, standDevScore, standDevTime, correlation, quad1Per, quad2Per, quad3Per, quad4Per)}>Download PDF</button>
+            <div className="statsDisplay">
+                <div className="statsCards">
+                    <h4 id="statDatasetSize">Size of Dataset<br/>{datasetSize}</h4>
+                    <h4 id="statStandardDeviationScore">Standard Deviation (Score)<br/>{standDevScore}</h4>
+                    <h4 id="statStandardDeviationTime">Standard Deviation (Time)<br/>{standDevTime}</h4>
+                    <h4 id="statCorrelation">Correlation (Score)vs(Time)<br/>{correlation}</h4>
+                </div>
+                <div className="statsCards">
+                    <h4 id="percentInQ1">% in Q1<br/>(Genius)<br/>{quad1Per} %</h4>
+                    <h4 id="percentInQ2">% in Q2<br/>(Expected Behavior)<br/>{quad2Per} %</h4>
+                    <h4 id="percentInQ3">% in Q3<br/>(Over-Confident)<br/>{quad3Per} %</h4>
+                    <h4 id="percentInQ4">% in Q4<br/>(Need External Help)<br/>{quad4Per} %</h4>
+                </div>
+            </div>
+            
         </div>
     );
 }

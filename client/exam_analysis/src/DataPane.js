@@ -1,7 +1,7 @@
 import './DataPane.css';
 import ClassData from './ClassData';
 import { handleFileAsync, handleTemplateDownload } from './scripts/FileHandling';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 function DataPane({ selctedToContent, examsToContent }) {
@@ -108,7 +108,6 @@ function DataPane({ selctedToContent, examsToContent }) {
 
       <div id="existingData">
         <h3>Previous Uploads</h3>
-        <h3>DB TEST - Previous Uploads</h3>
         <div id="classOptionsDB">
           {classesShown?.map(classShown =>
             <ClassData key={classShown.class_name} className={classShown.class_name} name={`${classShown.course_number}${classShown.semester}${classShown.class_year}`} classSelectedToggleDB={classSelectedToggleDB} />)}
