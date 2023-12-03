@@ -119,10 +119,10 @@ function DataPane({ selctedToContent, examsToContent }) {
 
         <button id="downloadTemplate" onClick={handleTemplateDownload}>Download Excel Template</button>
 
-
-        <label for="inputFile">Choose an Excel file to upload</label>
+        <br/>
+        <label for="inputFile">Choose a completed Excel Template to upload new data.</label>
         <input id="inputFile" name="inputFile" type="file" accept=".xlsx"></input>
-        <button id="uploadFile" onClick={() => handleFileAsync(userID)}>Upload</button>
+        <button id="uploadFile" onClick={() => handleFileAsync(userID)}>Upload File</button>
       </div>
 
     </div>
