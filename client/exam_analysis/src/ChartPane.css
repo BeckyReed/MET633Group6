@@ -1,14 +1,34 @@
 
 
 .chart {
-
-    background-color: rgb(0, 255, 255);
-
-        display: flex;
+    background-color: rgb(134, 240, 240);
+    display: flex;
     flex-direction: column;
 }
 
 #Scatter {
     position: relative;
 
+}
+
+.statsDisplay {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.statsCards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 40%;
+}
+
+.statsCards h4 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 40%;
 }

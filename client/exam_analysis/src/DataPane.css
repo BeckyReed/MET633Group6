@@ -1,8 +1,9 @@
 .DataPane {
-    background-color: mediumorchid;
+    background-color: rgb(216, 144, 235);
     display: flex;
     flex-direction: row;
-    width: 500px;
+    width: 350px;
+    height: fit-content;
 }
 
 #existingData {

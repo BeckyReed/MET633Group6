@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import Content from './Content';
 import Header from './Header';
@@ -14,20 +13,6 @@ export function AddLibrary(libraryURL) {
 
 function App() {
 
-/*   const [backendData, setBackendData] = useState([{}]);
-
-  useEffect(() => {
-    fetch("/api").then(
-      response => response.json()
-    ).then(
-      data => {
-        setBackendData(data)
-      }
-    )
-  }, []); */
-
-
-
   return (
     <div className="App">
       {AddLibrary("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js")}
@@ -36,6 +21,7 @@ function App() {
       <Content />
     </div>
   );
+
 }
 
 export default App;
