@@ -23,6 +23,8 @@ CREATE TABLE exams (
 	class_name VARCHAR (35) REFERENCES classes ON DELETE CASCADE,
 	time_min NUMERIC NOT NULL,
 	score NUMERIC(6,2) NOT NULL,
+	experience BOOLEAN NOT NULL,
+	stressor BOOLEAN NOT NULL,
 	is_outlier BOOLEAN NOT NULL,
 	PRIMARY KEY(exam_id)
 );

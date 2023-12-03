@@ -120,6 +120,8 @@ app.post("/addexam", (req, res) => {
     const class_name = req.body["courseName"];
     const time_min = req.body["time"];
     const score = req.body["score"];
+    const experience = req.body["experience"];
+    const stressor = req.body["stressor"]
     const is_outlier = req.body["outlier"];
 
 
@@ -128,7 +130,7 @@ app.post("/addexam", (req, res) => {
     console.log("Score: " + score);
     console.log("Is_Outlier: " + is_outlier);
 
-    const insertSTMT = `INSERT INTO exams (class_name, time_min, score, is_outlier) VALUES ('${class_name}', '${time_min}', '${score}', '${is_outlier}');`;
+    const insertSTMT = `INSERT INTO exams (class_name, time_min, score, experience, stressor, is_outlier) VALUES ('${class_name}', '${time_min}', '${score}', '${experience}', '${stressor}', '${is_outlier}');`;
     pool.query(insertSTMT).then((response) => {
         console.log("Data Saved EXAM");
         console.log(response);
