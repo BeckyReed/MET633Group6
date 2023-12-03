@@ -1,4 +1,4 @@
-import { Scatter, Line } from "react-chartjs-2";
+import { Scatter} from "react-chartjs-2";
 import { Chart as ChartJS, Colors, LineElement } from "chart.js/auto";
 import './ChartPane.css';
 import './scripts/ChartHandling';
@@ -163,7 +163,7 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
     /**Class LIST FROM DB */
     const [list, setList] = useState([]);
     /**CHART DATA */
-    const [chartDataSet, setChartDataSet] = useState();
+/*     const [chartDataSet, setChartDataSet] = useState(); */
     /**EXAM STATS Dataset Size*/
     const [datasetSize, setDatasetSize] = useState();
     /**EXAM STATS Standard Deviation SCORE*/
@@ -377,9 +377,8 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
         setCorrelation(resultCor);
     }
 
-    // console.log(exams);
 
-    //TEST GET DATA EXAMS
+    // GET DATA EXAMS
     function chartData(classArray, colorArray) {
 
         console.log(`TESTING: CHART PANE CHART DATA: To Chart Pane List: ${toChartPaneList()}`);
@@ -412,8 +411,7 @@ function ChartPane({ toChartPaneList, toChartPaneExams }) {
 
     return (
         <div className="chart">
-
-            {/* <div>{toChartPane()}</div> */}
+            
             <Scatter id="scatterChart" options={options} plugins={[bgColor, hQuadrentLine, vQuadrentLine]} data={chartData(toChartPaneList(), colorArray)} />
             <div>
                 <h3 id="statDatasetSize">Size of Dataset: {datasetSize}</h3>

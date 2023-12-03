@@ -94,20 +94,6 @@ function Content() {
   function contentToMainExams() {
     console.log(`Exams List: ${JSON.stringify(fetchedExams)}`);
 
-    /*     let keyExams = Array.from(fetchedExams.keys());
-        console.log(`keyExams: ` + keyExams);
-        let valExams = Array.from(fetchedExams.values());
-        console.log(`valExams: ` + valExams);
-        
-    
-        for (let index = 0; index < keyExams.length; index++) {
-          if (valExams[index] && !fetchedExams.includes(keyExams[index])) {
-            setChartList([...fetchedExams, keyExams[index]]);
-          } else if (!valExams[index] && fetchedExams.includes(keyExams[index])) {
-            setChartList([fetchedExams.splice(index, keyExams[index])]);
-          }
-        } */
-
     console.log(`content to main EXAM array: ${fetchedExams}`);
 
     return fetchedExams;

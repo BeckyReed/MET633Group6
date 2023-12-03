@@ -12,33 +12,6 @@ function ClassData({className, name, classSelectedToggleDB}) {
   const [ examData, setExamData ] = useState([]);
 
 
-
-  //get Exam Data JSON
-  async function getExamData (courseName) {
-    
-      //TEST HARD VALUE
-      //const className = "CS633SPRING2020";
-
-      try {
-          const response = await fetch(`${process.env.REACT_APP_SERVERURL}/exams/${courseName}`);
-
-          const json = await response.json();
-          console.log(`getExamData: JSON:: ${JSON.stringify(json)}`);
-          console.log(json);
-          setExamData(examData.push(json));
-      } catch (err) {
-          console.log(err);
-      }
-
-      console.log(`CHART PANE EXAMS GET DATA : ${className}  :: ${examData}`);
-      console.log(examData);
-  }
- //useEffect(() => getExamData, []);
-  //console.log(`CHART PANE EXAMS GET DATA : ${className}  :: ${examData}`);
-  //console.log(examData);
-  
-
-
   //pass data to the DataPaine method classSelectedToggleDB
 function getData () {
     setSelected( !selected );
@@ -60,14 +33,8 @@ function getData () {
       <div className="ClassData">
         <button className="selectClassData" 
         onClick={() => {
-/*           if (examData.length == 0) {
-            getExamData(courseName);
-            console.log(`GETTIG DATA ON CLICK`)
-          }  */
           
           classSelectedToggleDB(getData());   
-
-
           console.log(`selected: ${lable}: ` + selected); 
 
           } }>{tag()}{lable}</button>
