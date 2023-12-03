@@ -1,17 +1,17 @@
 .DataPane {
     background-color: rgb(216, 144, 235);
     display: flex;
-    flex-direction: row;
-    width: 350px;
+    flex-direction: column-reverse;
+    width: 250px;
     height: fit-content;
 }
 
 #existingData {
-    width: 50%;
+    width: 100%;
 }
 
 #uploadNew {
-    width: 50%;
+    width: 100%;
 }
 
 #classOptions {
