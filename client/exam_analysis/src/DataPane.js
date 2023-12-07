@@ -18,6 +18,7 @@ function DataPane({ selctedToContent, examsToContent }) {
   /**EXAM LIST FROM DB */
   const [examsList, setExamsList] = useState([]);
 
+
   //TEST GET DATA CLASSES
   async function getClassData ()  {
     try {
