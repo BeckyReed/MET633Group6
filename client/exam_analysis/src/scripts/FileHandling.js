@@ -50,14 +50,16 @@ async function handleFileAsync(user_id) {
                         }
                         Promise.all(examPromises).then( results => {
                             console.log("EXAM Promise. ALL RETURNED");
+
+                            setTimeout(() => {
+                                console.log("handle File Async end");
+                                window.location.reload(true);
+                            }, 500)
+                            
                         })
-                    }, 3000);
+                    }, 2000);
                 })
-
-                window.dispatchEvent(new Event('storage'));
             }
-
-
         }
 
     }
