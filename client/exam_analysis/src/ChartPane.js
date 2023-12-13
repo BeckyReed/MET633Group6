@@ -140,6 +140,7 @@ const options = {
             forceOverride: true
         },
         legend: {
+            onClick: null,
             labels: {
                 font: {
                     size: 15
